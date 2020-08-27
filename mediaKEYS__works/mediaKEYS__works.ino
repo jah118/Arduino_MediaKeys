@@ -1,27 +1,33 @@
 /*
 
   Arduino Media Keys
-  Version 1.0
-  9/11/2018
-
-  Author:
-  Tomo Murovec
-  UBO Open Factory
-  https://uboopenfactory.univ-brest.fr
-  Brest, France
+  Version 0.5
+  9/08/2020
 
   Dependencies:
   HID-Project by NicoHood Version 2.5.0 or above
   - can be found in Arduino Lirary Manager
   - or: https://github.com/NicoHood/HID
 
+  Reference:
+  The Reference links below is where the info to getting the project to work comes from
+  https://uboopenfactory.univ-brest.fr/Les-Labs/MusicLab/Projets/Arduino-Media-Keys
+  - most code comes from here.
+  https://github.com/NicoHood/HID/wiki
+  https://www.stefanjones.ca/blog/arduino-leonardo-remote-multimedia-keys/
+  https://arduino.stackexchange.com/questions/8934/send-keyboard-media-keys-with-keyboard-library
+  http://www.freebsddiary.org/APC/usb_hid_usages.php
+  - list of hid codes for further use or differt use case
+  https://www.instructables.com/id/USB-Volume-Control-and-Caps-Lock-LED-Simple-Cheap-/
 */
+
+
 // include the HID library
 #include "HID-Project.h"
 #include "FastLED.h" // 
 
 //rgb
-//----------------------------------------
+//----------------------------------------------------------------------\\
 #define DATA_PIN    9
 //#define CLK_PIN   4
 #define LED_TYPE    WS2811
@@ -34,9 +40,11 @@ CRGB leds[NUM_LEDS];
 int rgbState = 1;
 int lastrgbState = 0;
 
-//________________________________________________
+//______________________________________________________________________\\
+
+
 //test singel or double press of keyy
-//-----------------------------------------------
+//----------------------------------------------------------------------\\
 long onTime = 0 ;
 int lastReading = LOW;
 int bounceTime = 50;
@@ -49,7 +57,7 @@ long doubleTime = 300;
 //const int BluepinLed = 9;
 const int f20Button = 8;
 
-//__________________________________________
+//____________________________________________________________________\\
 
 // definitions for each pin used
 const int pinLed = LED_BUILTIN;
@@ -65,10 +73,10 @@ const int backButton = 6;
 
 const bool debugState = true;
 
-void isDebugTruePrintToSerial(String temp){
-      if (debugState) {
-      Serial.println(temp);
-    }
+void isDebugTruePrintToSerial(String temp) {
+  if (debugState) {
+    Serial.println(temp);
+  }
 }
 
 
@@ -81,18 +89,18 @@ void press() {
       case 0:
         FastLED.clear();
         leds[2] = CRGB::Blue;
-        Serial.println("blues");
-        Serial.println("lastrgbState");
-        Serial.println(lastrgbState);
+        isDebugTruePrintToSerial("blues");
+        isDebugTruePrintToSerial("lastrgbState");
+        isDebugTruePrintToSerial(lastrgbState);
         FastLED.show();
         lastrgbState = 0;
         rgbState = 0;
         break;
       case 1:
-        Serial.println("reddd");
+        isDebugTruePrintToSerial("reddd");
         FastLED.clear();
-        Serial.println("lastrgbState black");
-        Serial.println(lastrgbState);
+        isDebugTruePrintToSerial("lastrgbState black");
+        isDebugTruePrintToSerial(lastrgbState);
         leds[2] = CRGB::Black;
         FastLED.show();
         lastrgbState = 0;
@@ -102,7 +110,7 @@ void press() {
     // digitalWrite(BluepinLed, 0); -----
   }
   if ((millis() - lastSwitchTime) > doubleTime) {
-    Serial.println("single press");
+    isDebugTruePrintToSerial("single press");
     Keyboard.write(KEY_F20);
     //digitalWrite(BluepinLed, !digitalRead(BluepinLed));-----
 
@@ -118,12 +126,12 @@ void press() {
 
     switch (rgbState) {
       case 0:
-        Serial.println("case 0");
-        Serial.println("lastrgbState");
-        Serial.println(lastrgbState);
+        isDebugTruePrintToSerial("case 0");
+        isDebugTruePrintToSerial("lastrgbState");
+        isDebugTruePrintToSerial(lastrgbState);
 
-        Serial.println("rgbState black");
-        Serial.println(rgbState);
+        isDebugTruePrintToSerial("rgbState black");
+        isDebugTruePrintToSerial(rgbState);
         FastLED.clear();
         leds[0] = CRGB::Black;
         FastLED.show();
@@ -134,11 +142,12 @@ void press() {
 
         if (lastrgbState == 1) {
           delay(30);
-          Serial.println("lastrgbState  sddsf");
-          Serial.println(lastrgbState);
+          isDebugTruePrintToSerial("case  1");
+          isDebugTruePrintToSerial("lastrgbState");
+          isDebugTruePrintToSerial(lastrgbState);
 
-          Serial.println("rgbState black");
-          Serial.println(rgbState);
+          isDebugTruePrintToSerial("rgbState black");
+          isDebugTruePrintToSerial(rgbState);
           FastLED.clear();
           leds[1] = CRGB::Black;
           FastLED.show();
