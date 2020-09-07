@@ -1,4 +1,5 @@
 /*
+  Jonas
 
   Arduino Media Keys
   Version 0.5
@@ -41,23 +42,20 @@ int rgbState = 1;
 int lastrgbState = 0;
 
 
-
-
 //test singel or double press of keyy
 
 unsigned long onTime;
 int lastReading = LOW;
-int bounceTime = 50;
-int holdTime = 250;
+int bounceTime = 35; //50
+int holdTime = 500; //500
 unsigned int hold = 0;
 
 long lastSwitchTime = 0;
-long doubleTime = 300;
+long doubleTime = 230; // 150
 
 const int f20Button = 8;
+const int f16Button = 7;
 int reading;
-
-
 
 // definitions for each pin used
 const int pinLed = LED_BUILTIN;
@@ -70,7 +68,6 @@ const int playButton = 5;
 const int fwdButton = 7;
 const int backButton = 6;
 
-
 const bool debugState = true;
 
 void isDebugTruePrintToSerial(String temp) {
@@ -79,38 +76,64 @@ void isDebugTruePrintToSerial(String temp) {
   }
 }
 
+void turnOnRGBByState (int cRed, int cGreen, int cBlue, bool state, int n) {
 
-void press() {
+  switch (state) {
+    case 0:
+      FastLED.clear();
+      leds[n] = CRGB( cRed, cGreen, cBlue);
+      isDebugTruePrintToSerial(state + "");
+      isDebugTruePrintToSerial(lastrgbState + "");
+      FastLED.show();
+      lastrgbState = 0;
+      rgbState = 0;
+      break;
+    case 1:
+      isDebugTruePrintToSerial("reddd");
+      FastLED.clear();
+      isDebugTruePrintToSerial("lastrgbState black");
+      isDebugTruePrintToSerial(lastrgbState + "");
+      leds[2] = CRGB::Black;
+      FastLED.show();
+      lastrgbState = 0;
+      rgbState = 0;
+      break;
+  }
+
+}
+
+void press () {
   if ((millis() - lastSwitchTime) < doubleTime) {
     isDebugTruePrintToSerial("double press");
-    Keyboard.write(KEY_F19);
 
-    switch (lastrgbState) {
-      case 0:
-        FastLED.clear();
-        leds[2] = CRGB::Blue;
-        isDebugTruePrintToSerial("blues");
-        isDebugTruePrintToSerial("lastrgbState");
-        isDebugTruePrintToSerial(lastrgbState + "");
-        FastLED.show();
-        lastrgbState = 0;
-        rgbState = 0;
-        break;
-      case 1:
-        isDebugTruePrintToSerial("reddd");
-        FastLED.clear();
-        isDebugTruePrintToSerial("lastrgbState black");
-        isDebugTruePrintToSerial(lastrgbState + "");
-        leds[2] = CRGB::Black;
-        FastLED.show();
-        lastrgbState = 0;
-        rgbState = 0;
-        break;
-    }
-  }
-  if ((millis() - lastSwitchTime) > doubleTime) {
+    BootKeyboard.write(KEY_F16);
+    turnOnRGBByState (250, 0, 0, lastrgbState, 2);
+
+    //    switch (lastrgbState) {
+    //      case 0:
+    //        FastLED.clear();
+    //        leds[2] = CRGB::Blue; 66
+    //        isDebugTruePrintToSerial("blues");
+    //        isDebugTruePrintToSerial("lastrgbState");
+    //        isDebugTruePrintToSerial(lastrgbState + "");
+    //        FastLED.show();
+    //        lastrgbState = 0;
+    //        rgbState = 0;
+    //        break;
+    //      case 1:
+    //        isDebugTruePrintToSerial("reddd");
+    //        FastLED.clear();
+    //        isDebugTruePrintToSerial("lastrgbState black");
+    //        isDebugTruePrintToSerial(lastrgbState + "");
+    //        leds[2] = CRGB::Black;
+    //        FastLED.show();
+    //        lastrgbState = 0;
+    //        rgbState = 0;
+    //        break;
+    //    }
+  }  else if ((millis() - lastSwitchTime) > doubleTime) {
     isDebugTruePrintToSerial("single press");
-    Keyboard.write(KEY_F20);
+    BootKeyboard.write(KEY_F19);
     switch (rgbState) {
       case 0:
         isDebugTruePrintToSerial("case 0");
@@ -179,8 +202,8 @@ void setup() {
   pinMode(f20Button, INPUT_PULLUP );
 
   // begin HID connection
+  BootKeyboard.begin();
   Consumer.begin();
-
 
   delay(3000); // 3 second delay for recovery
   // tell FastLED about the LED strip configuration
@@ -210,7 +233,7 @@ void loop() {
   if (reading == HIGH && lastReading == LOW) {
     onTime = millis();
   } else if (reading == LOW && lastReading == HIGH) {
-//    onTime = millis();
+    //    onTime = millis();
     if (((millis() - onTime) > bounceTime) && hold != 1) {
       press();
     }
