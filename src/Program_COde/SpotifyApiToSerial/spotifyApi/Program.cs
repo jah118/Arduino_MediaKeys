@@ -17,8 +17,8 @@ namespace spotifyApi
     class Program
     {
         private static SpotifyWebAPI _spotify;
-        private static string _clientId = "38dbac438ad440dc8bdb82ac3516a9d6";
-        private static string _secretId = "ef4b8f7b5467462cae12de4d0da2e018";
+        private static string _clientId = ConfigurationManager.AppSettings["clientId"];
+        private static string _secretId = ConfigurationManager.AppSettings["secretId"];
 
         public Program()
         {
