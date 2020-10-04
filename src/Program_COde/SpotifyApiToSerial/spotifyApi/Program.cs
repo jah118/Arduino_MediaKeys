@@ -20,6 +20,7 @@ namespace spotifyApi
         private static string _clientId = ConfigurationManager.AppSettings["clientId"];
         private static string _secretId = ConfigurationManager.AppSettings["secretId"];
 
+
         public Program()
         {
 
