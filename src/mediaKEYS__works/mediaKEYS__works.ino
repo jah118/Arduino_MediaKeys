@@ -107,7 +107,7 @@ void press () {
     isDebugTruePrintToSerial("double press");
 
     BootKeyboard.write(KEY_F16);
-    turnOnRGBByState (250, 0, 0, lastrgbState, 2);
+    turnOnRGBByState (0, 0, 250, lastrgbState, 2);
 
     //    switch (lastrgbState) {
     //      case 0:
