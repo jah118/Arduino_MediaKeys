@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spotifyApi", "spotifyApi\sp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{C96B8060-C5E7-4C3F-ADAE-DE83983375E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{74FA18F0-2332-400D-A663-C18E205C23BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C96B8060-C5E7-4C3F-ADAE-DE83983375E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C96B8060-C5E7-4C3F-ADAE-DE83983375E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C96B8060-C5E7-4C3F-ADAE-DE83983375E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74FA18F0-2332-400D-A663-C18E205C23BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74FA18F0-2332-400D-A663-C18E205C23BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74FA18F0-2332-400D-A663-C18E205C23BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74FA18F0-2332-400D-A663-C18E205C23BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

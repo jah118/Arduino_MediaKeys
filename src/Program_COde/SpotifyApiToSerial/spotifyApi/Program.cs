@@ -17,43 +17,30 @@ namespace spotifyApi
     class Program
     {
         private static SpotifyWebAPI _spotify;
-        private static string _clientId = ConfigurationManager.AppSettings["clientId"];
-        private static string _secretId = ConfigurationManager.AppSettings["secretId"];
+        private static readonly string _clientId = ConfigurationManager.AppSettings["clientId"];
+        private static readonly string _secretId = ConfigurationManager.AppSettings["secretId"];
 
-
-        public Program()
+        static async Task Main()
         {
+            //var spotify = new SpotifyClient("BQCh683yxsiAb4BPb9VmdIl5KpmbTgVQ1xn5TLN5b6pPDFseYVknV5ZgJYBsQPEsXBTUunqwbPumVkwoFHXn33aEEaES77HIH6MbZnRV4bmtpkcbJjsLnvG9AMAF2_fEkz61EXqAH4t9NoaFWqxGcyOL4w8_");
 
-        }
+            //
+            //Console.WriteLine(track.Name);
+            //Console.ReadLine();
 
-        static async void Main(string[] args)
-        {
-            AuthorizationCodeAuth auth = new AuthorizationCodeAuth(
-            _clientId,
-            _secretId,
-            "http://localhost:4002",
-            "http://localhost:4002",
-            Scope.PlaylistReadPrivate | Scope.PlaylistReadCollaborative
-            );
-
-            auth.AuthReceived += async (sender, payload) =>
+            CredentialsAuth auth = new CredentialsAuth(_clientId, _secretId);
+            Token token = await auth.GetToken();
+            _spotify = new SpotifyWebAPI()
             {
-                auth.Stop();
-                Token token = await auth.ExchangeCode(payload.Code);
-                SpotifyWebAPI api = new SpotifyWebAPI()
-                {
-                    TokenType = token.TokenType,
-                    AccessToken = token.AccessToken
-                };
-                // Do requests with API client
+                AccessToken = token.AccessToken,
+                TokenType = token.TokenType
             };
-            auth.Start(); // Starts an internal HTTP Server
-            auth.OpenBrowser();
-            // CredentialsAuth auth = new CredentialsAuth("38dbac438ad440dc8bdb82ac3516a9d6", "ef4b8f7b5467462cae12de4d0da2e018");
-
-
+            FullTrack track = _spotify.GetTrack("02itaCXOdC54J0ISjqqFAp?si=aErXwbbHQ-mwggedjmgUkg");
+            
+            Console.WriteLine(track.Name); //Yeay! We just printed a tracks name.
+            Console.WriteLine(track.Popularity); //Yeay! We just printed a tracks name.
+            Console.WriteLine(track.TrackNumber); //Yeay! We just printed a tracks name.
+            Console.ReadLine();
         }
-
-
     }
 }
