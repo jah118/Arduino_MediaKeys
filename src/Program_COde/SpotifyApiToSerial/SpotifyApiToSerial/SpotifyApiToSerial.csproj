@@ -179,11 +179,5 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ConsoleApp1\SerialCommunication.csproj">
-      <Project>{4EAD74D1-CC14-41D3-9C1B-1658D0AE87D7}</Project>
-      <Name>SerialCommunication</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
