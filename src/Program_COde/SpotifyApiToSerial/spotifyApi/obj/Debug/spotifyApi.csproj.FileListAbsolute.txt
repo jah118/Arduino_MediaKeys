@@ -19,6 +19,7 @@ C:\Users\jonas\source\repos\SpotifyApiToSerial\spotifyApi\bin\Debug\Unosquare.Sw
 C:\Users\jonas\source\repos\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.csproj.CopyComplete
 C:\Users\jonas\source\repos\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.exe
 C:\Users\jonas\source\repos\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.pdb
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.csproj.CoreCompileInputs.cache
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\spotifyApi.exe.config
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\spotifyApi.exe
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\spotifyApi.pdb
@@ -74,7 +75,6 @@ G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotify
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\Unosquare.Labs.EmbedIO.xml
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\Unosquare.Swan.Lite.xml
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.csprojAssemblyReference.cache
-G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.csproj.CoreCompileInputs.cache
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.csproj.CopyComplete
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.exe
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.pdb

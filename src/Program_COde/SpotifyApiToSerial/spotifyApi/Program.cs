@@ -17,30 +17,76 @@ namespace spotifyApi
     class Program
     {
         private static SpotifyWebAPI _spotify;
+        private static ImplicitGrantAuth auth;
         private static readonly string _clientId = ConfigurationManager.AppSettings["clientId"];
         private static readonly string _secretId = ConfigurationManager.AppSettings["secretId"];
 
-        static async Task Main()
+        public static void Main()
         {
-            //var spotify = new SpotifyClient("BQCh683yxsiAb4BPb9VmdIl5KpmbTgVQ1xn5TLN5b6pPDFseYVknV5ZgJYBsQPEsXBTUunqwbPumVkwoFHXn33aEEaES77HIH6MbZnRV4bmtpkcbJjsLnvG9AMAF2_fEkz61EXqAH4t9NoaFWqxGcyOL4w8_");
+             auth = new ImplicitGrantAuth(
+              _clientId,
+              "http://localhost:4002/callback",
+              "http://localhost:4002/callback",
+              Scope.UserReadPrivate
+            );
+            auth.AuthReceived += (sender, payload) =>
+           {
+               auth.Stop(); // `sender` is also the auth instance
+               _spotify = new SpotifyWebAPI()
+               {
+                   TokenType =  payload.TokenType,
+                   AccessToken = payload.AccessToken
+               };
+               // Do requests with API client
+               
+           };
+            auth.Start(); // Starts an internal HTTP Server
+            auth.OpenBrowser();
 
-            //
-            //Console.WriteLine(track.Name);
-            //Console.ReadLine();
 
-            CredentialsAuth auth = new CredentialsAuth(_clientId, _secretId);
-            Token token = await auth.GetToken();
-            _spotify = new SpotifyWebAPI()
+
+            PrivateProfile profile = _spotify.GetPrivateProfile();
+            if (profile.HasError())
             {
-                AccessToken = token.AccessToken,
-                TokenType = token.TokenType
-            };
-            FullTrack track = _spotify.GetTrack("02itaCXOdC54J0ISjqqFAp?si=aErXwbbHQ-mwggedjmgUkg");
-            
+                Console.WriteLine("Error Status: " + profile.Error.Status);
+                Console.WriteLine("Error Msg: " + profile.Error.Message);
+            }
+
+
+            FullTrack track = _spotify.GetTrack("3FFjdo3CSKqeGx3nlN0WWv?si=4xDdGmMaTJ-FpPDdQi8MRA");
+
             Console.WriteLine(track.Name); //Yeay! We just printed a tracks name.
             Console.WriteLine(track.Popularity); //Yeay! We just printed a tracks name.
             Console.WriteLine(track.TrackNumber); //Yeay! We just printed a tracks name.
             Console.ReadLine();
+        }
+
+        class ClientCredentials
+        {
+            //this works for geting on-user-related information e.g search for a Track.
+            //private static SpotifyWebAPI _spotify;
+            //private static readonly string _clientId = ConfigurationManager.AppSettings["clientId"];
+            //private static readonly string _secretId = ConfigurationManager.AppSettings["secretId"];
+
+            async Task Run()
+            {
+                //CredentialsAuth auth = new CredentialsAuth(_clientId, _secretId);
+                //Token token = await auth.GetToken();
+                //_spotify = new SpotifyWebAPI()
+                //{
+                //    AccessToken = token.AccessToken,
+                //    TokenType = token.TokenType
+                //};
+
+                //FullTrack track = _spotify.GetTrack("02itaCXOdC54J0ISjqqFAp?si=aErXwbbHQ-mwggedjmgUkg");
+
+                //Console.WriteLine(track.Name); //Yeay! We just printed a tracks name.
+                //Console.WriteLine(track.Popularity); //Yeay! We just printed a tracks name.
+                //Console.WriteLine(track.TrackNumber); //Yeay! We just printed a tracks name.
+                //Console.ReadLine();
+
+            }
+
         }
     }
 }
