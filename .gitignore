@@ -3,6 +3,7 @@ src/Program_COde/SpotifyApiToSerial/spotifyApi/App.config
 src/Program_COde/SpotifyApiToSerial/spotifyApi/App.config
 App.config
 src/Program_COde/SpotifyApiToSerial/ConsoleApp1/bin
+src\Program_COde\SpotifyApiToSerial\ConsoleApp1\bin
 
 # User-specific files
 *.rsuser
@@ -361,3 +362,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+*.exe
+*.config
+*.pdb
+*.cache
+*.txt
