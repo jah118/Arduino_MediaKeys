@@ -54,19 +54,15 @@ long lastSwitchTime = 0;
 long doubleTime = 230; // 150
 
 const int f20Button = 8;
-const int f16Button = 7;
+
 int reading;
 
 // definitions for each pin used
 //const int pinLed = LED_BUILTIN;
 
-
-const int volUpButton = 2;
-const int volDwnButton = 3;
-const int muteButton = 4;
 const int playButton = 5;
-const int fwdButton = 7;
 const int backButton = 6;
+const int fwdButton = 7;
 
 const int delayConst75 = 75;
 const int delayConst250 = 250;
@@ -229,8 +225,9 @@ void setup() {
 }
 
 void loop() {
-  //single oor double  pressed
-  //-----------------------------------------------------------------------------------------
+
+  //single or double  pressed
+  //-----------------------------------------------------------------------------------------\\
   reading = digitalRead(f20Button);
 
   if (reading == HIGH && lastReading == LOW) {
@@ -246,64 +243,40 @@ void loop() {
   }
 
   lastReading = reading;
+  //__________________________________________________________________________________________\\
 
-  /*
-    if (!digitalRead(f20Button)) {
-     digitalWrite(pinLed, HIGH);
-      Keyboard.write(KEY_F20);
-     delay(500);
-     digitalWrite(pinLed, LOW);
-    }
-  */
-  //__________________________________________________________________________________________
+
+  
 
   // if the play button is pressed
+
+switch () {
+  case playButton
+  
+  
+}
+  
   if (!digitalRead(playButton)) {
-    digitalWrite(pinLed, HIGH); // turn on LED
     Consumer.write(MEDIA_PLAY_PAUSE); // send HID command
     isDebugTruePrintToSerial("Play/Pause");
     delay(delayConst250); // wait
-    digitalWrite(pinLed, LOW); // turn off LED
   }
 
   // all the buttons follow the same pattern ...
 
   if (!digitalRead(fwdButton)) {
-    digitalWrite(pinLed, HIGH);
     Consumer.write(MEDIA_NEXT);
     isDebugTruePrintToSerial("Next");
     delay(delayConst250);
-    digitalWrite(pinLed, LOW);
   }
 
   if (!digitalRead(backButton)) {
-    digitalWrite(pinLed, HIGH);
     Consumer.write(MEDIA_PREVIOUS);
+    isDebugTruePrintToSerial("Back");
     delay(delayConst250);
-    digitalWrite(pinLed, LOW);
   }
 
-  if (!digitalRead(volUpButton)) {
-    //digitalWrite(pinLed, HIGH);
-    Consumer.write(MEDIA_VOLUME_UP);
-    delay(delayConst75);
-    //digitalWrite(pinLed, LOW);
-  }
 
-  if (!digitalRead(volDwnButton)) {
-    // digitalWrite(pinLed, HIGH);
-    Consumer.write(MEDIA_VOLUME_DOWN);
-    delay(delayConst75);
-    //digitalWrite(pinLed, LOW);
-  }
-
-  if (!digitalRead(muteButton)) {
-    digitalWrite(pinLed, HIGH);
-    isDebugTruePrintToSerial("Mute");
-    Consumer.write(MEDIA_VOLUME_MUTE);
-    delay(2*delayConst250);
-    digitalWrite(pinLed, LOW);
-  }
 
 
 }
