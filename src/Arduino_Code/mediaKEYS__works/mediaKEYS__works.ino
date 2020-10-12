@@ -107,29 +107,6 @@ void press () {
 
     BootKeyboard.write(KEY_F16);
     turnOnRGBByState (0, 0, 250, lastrgbState, 2);
-
-    //    switch (lastrgbState) {
-    //      case 0:
-    //        FastLED.clear();
-    //        leds[2] = CRGB::Blue; 66
-    //        isDebugTruePrintToSerial("blues");
-    //        isDebugTruePrintToSerial("lastrgbState");
-    //        isDebugTruePrintToSerial(lastrgbState + "");
-    //        FastLED.show();
-    //        lastrgbState = 0;
-    //        rgbState = 0;
-    //        break;
-    //      case 1:
-    //        isDebugTruePrintToSerial("reddd");
-    //        FastLED.clear();
-    //        isDebugTruePrintToSerial("lastrgbState black");
-    //        isDebugTruePrintToSerial(lastrgbState + "");
-    //        leds[2] = CRGB::Black;
-    //        FastLED.show();
-    //        lastrgbState = 0;
-    //        rgbState = 0;
-    //        break;
-    //    }
   }  else if ((millis() - lastSwitchTime) > doubleTime) {
     isDebugTruePrintToSerial("single press");
     BootKeyboard.write(KEY_F19);
@@ -187,15 +164,10 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   // define the pin mode for each pin used
-  pinMode(pinLed, OUTPUT);
-  digitalWrite(pinLed, LOW);
 
   pinMode(playButton, INPUT_PULLUP);
   pinMode(fwdButton, INPUT_PULLUP);
   pinMode(backButton, INPUT_PULLUP);
-  pinMode(volUpButton, INPUT_PULLUP);
-  pinMode(volDwnButton, INPUT_PULLUP);
-  pinMode(muteButton, INPUT_PULLUP);
 
   //press decllare
   pinMode(f20Button, INPUT_PULLUP );
@@ -245,17 +217,7 @@ void loop() {
   lastReading = reading;
   //__________________________________________________________________________________________\\
 
-
-  
-
   // if the play button is pressed
-
-switch () {
-  case playButton
-  
-  
-}
-  
   if (!digitalRead(playButton)) {
     Consumer.write(MEDIA_PLAY_PAUSE); // send HID command
     isDebugTruePrintToSerial("Play/Pause");
