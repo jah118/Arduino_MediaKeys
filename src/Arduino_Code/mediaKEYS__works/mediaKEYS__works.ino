@@ -58,7 +58,7 @@ const int f16Button = 7;
 int reading;
 
 // definitions for each pin used
-const int pinLed = LED_BUILTIN;
+//const int pinLed = LED_BUILTIN;
 
 
 const int volUpButton = 2;
@@ -67,6 +67,9 @@ const int muteButton = 4;
 const int playButton = 5;
 const int fwdButton = 7;
 const int backButton = 6;
+
+const int delayConst75 = 75;
+const int delayConst250 = 250;
 
 const bool debugState = true;
 
@@ -259,7 +262,7 @@ void loop() {
     digitalWrite(pinLed, HIGH); // turn on LED
     Consumer.write(MEDIA_PLAY_PAUSE); // send HID command
     isDebugTruePrintToSerial("Play/Pause");
-    delay(250); // wait
+    delay(delayConst250); // wait
     digitalWrite(pinLed, LOW); // turn off LED
   }
 
@@ -269,28 +272,28 @@ void loop() {
     digitalWrite(pinLed, HIGH);
     Consumer.write(MEDIA_NEXT);
     isDebugTruePrintToSerial("Next");
-    delay(250);
+    delay(delayConst250);
     digitalWrite(pinLed, LOW);
   }
 
   if (!digitalRead(backButton)) {
     digitalWrite(pinLed, HIGH);
     Consumer.write(MEDIA_PREVIOUS);
-    delay(250);
+    delay(delayConst250);
     digitalWrite(pinLed, LOW);
   }
 
   if (!digitalRead(volUpButton)) {
     //digitalWrite(pinLed, HIGH);
     Consumer.write(MEDIA_VOLUME_UP);
-    delay(70);
+    delay(delayConst75);
     //digitalWrite(pinLed, LOW);
   }
 
   if (!digitalRead(volDwnButton)) {
     // digitalWrite(pinLed, HIGH);
     Consumer.write(MEDIA_VOLUME_DOWN);
-    delay(70);
+    delay(delayConst75);
     //digitalWrite(pinLed, LOW);
   }
 
@@ -298,7 +301,7 @@ void loop() {
     digitalWrite(pinLed, HIGH);
     isDebugTruePrintToSerial("Mute");
     Consumer.write(MEDIA_VOLUME_MUTE);
-    delay(500);
+    delay(2*delayConst250);
     digitalWrite(pinLed, LOW);
   }
 
