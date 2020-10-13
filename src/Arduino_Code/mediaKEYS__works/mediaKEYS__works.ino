@@ -28,7 +28,6 @@
 #include "FastLED.h" // 
 
 //rgb
-
 #define DATA_PIN 9
 //#define CLK_PIN 4
 #define LED_TYPE WS2811
@@ -152,7 +151,6 @@ void press () {
           isDebugTruePrintToSerial(" new val rgbState red");
           isDebugTruePrintToSerial(rgbState + "");
         }
-
         break;
     }
   }
@@ -237,8 +235,5 @@ void loop() {
     isDebugTruePrintToSerial("Back");
     delay(delayConst250);
   }
-
-
-
 
 }
