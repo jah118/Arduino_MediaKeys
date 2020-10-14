@@ -119,35 +119,14 @@ void press () {
       case 1:
         Serial.println("case 1");
 
-        if (lastrgbState == 1) {
 
-          //delay(30);
-          isDebugTruePrintToSerial("case  1");
-          isDebugTruePrintToSerial("lastrgbState");
-          isDebugTruePrintToSerial(lastrgbState + "");
-
-          isDebugTruePrintToSerial("rgbState black");
-          isDebugTruePrintToSerial(rgbState + "");
-
-          //turnOnRGBByState (0, 0, 0, lastrgbState, 1);
-          //          FastLED.clear();
-          //          leds[1] = CRGB::Black;
-          //          FastLED.show();
-          lastrgbState = 0;
-          rgbState = 0;
-        } else {
-          isDebugTruePrintToSerial("lastrgbState ffffff");
-          isDebugTruePrintToSerial(lastrgbState + "");
-
-          isDebugTruePrintToSerial("rgbState red");
-          isDebugTruePrintToSerial(rgbState + "");
           turnOnRGBByState (255, 0, 0, lastrgbState, 0);
           //          leds[0] = CRGB::Red;
           //          FastLED.show();
           rgbState = 0;
           isDebugTruePrintToSerial(" new val rgbState red");
           isDebugTruePrintToSerial(rgbState + "");
-        }
+        
         break;
     }
   }
