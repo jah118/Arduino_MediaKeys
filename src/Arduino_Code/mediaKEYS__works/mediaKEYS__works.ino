@@ -23,6 +23,9 @@
 */
 
 
+
+//test singel or double press of keyy
+
 // include the HID library
 #include "HID-Project.h"
 #include "FastLED.h" // 
@@ -40,9 +43,7 @@ CRGB leds[NUM_LEDS];
 int rgbState = 1;
 int lastrgbState = 0;
 
-
-//test singel or double press of keyy
-
+//press const for determening a press
 unsigned long onTime;
 int lastReading = LOW;
 int bounceTime = 35; //50
@@ -69,9 +70,9 @@ void isDebugTruePrintToSerial(String temp) {
     Serial.println(temp);
   }
 }
+
 // n = led
 void turnOnRGBByState (int cRed, int cGreen, int cBlue, bool state, int n) {
-
   switch (state) {
     case 0:
       FastLED.clear();
@@ -93,7 +94,6 @@ void turnOnRGBByState (int cRed, int cGreen, int cBlue, bool state, int n) {
       rgbState = 0;
       break;
   }
-
 }
 
 void press () {
@@ -110,23 +110,15 @@ void press () {
         isDebugTruePrintToSerial("case 0");
         isDebugTruePrintToSerial("lastrgbState : " + lastrgbState);
         isDebugTruePrintToSerial("rgbState black : " +  rgbState);
-        //        FastLED.clear();
-        //        leds[0] = CRGB::Black;
-        //        FastLED.show();
         turnOnRGBByState (0, 0, 0, lastrgbState, 0);
         rgbState = 1;
         break;
       case 1:
-        Serial.println("case 1");
-
-
-          turnOnRGBByState (255, 0, 0, lastrgbState, 0);
-          //          leds[0] = CRGB::Red;
-          //          FastLED.show();
-          rgbState = 0;
-          isDebugTruePrintToSerial(" new val rgbState red");
-          isDebugTruePrintToSerial(rgbState + "");
-        
+        isDebugTruePrintToSerial("case 1");
+        turnOnRGBByState (255, 0, 0, lastrgbState, 0);
+        rgbState = 0;
+        isDebugTruePrintToSerial(" new val rgbState red");
+        isDebugTruePrintToSerial(rgbState + "");
         break;
     }
   }
@@ -188,15 +180,14 @@ void loop() {
 
   lastReading = reading;
   //__________________________________________________________________________________________
-
+  // all the buttons follow the same pattern ...
+ 
   // if the play button is pressed
   if (!digitalRead(playButton)) {
     Consumer.write(MEDIA_PLAY_PAUSE); // send HID command
     isDebugTruePrintToSerial("Play/Pause");
     delay(delayConst250); // wait
   }
-
-  // all the buttons follow the same pattern ...
 
   if (!digitalRead(fwdButton)) {
     Consumer.write(MEDIA_NEXT);
@@ -209,5 +200,4 @@ void loop() {
     isDebugTruePrintToSerial("Back");
     delay(delayConst250);
   }
-
 }
