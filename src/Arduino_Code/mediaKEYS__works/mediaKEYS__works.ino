@@ -53,11 +53,7 @@ long lastSwitchTime = 0;
 long doubleTime = 230; // 150
 
 const int f20Button = 8;
-
 int reading;
-
-// definitions for each pin used
-//const int pinLed = LED_BUILTIN;
 
 const int playButton = 5;
 const int backButton = 6;
@@ -73,7 +69,7 @@ void isDebugTruePrintToSerial(String temp) {
     Serial.println(temp);
   }
 }
-
+// n = led
 void turnOnRGBByState (int cRed, int cGreen, int cBlue, bool state, int n) {
 
   switch (state) {
@@ -112,30 +108,31 @@ void press () {
     switch (rgbState) {
       case 0:
         isDebugTruePrintToSerial("case 0");
-        isDebugTruePrintToSerial("lastrgbState");
-        isDebugTruePrintToSerial(lastrgbState + "");
-
-        isDebugTruePrintToSerial("rgbState black");
-        isDebugTruePrintToSerial(rgbState + "");
-        FastLED.clear();
-        leds[0] = CRGB::Black;
-        FastLED.show();
+        isDebugTruePrintToSerial("lastrgbState : " + lastrgbState);
+        isDebugTruePrintToSerial("rgbState black : " +  rgbState);
+        //        FastLED.clear();
+        //        leds[0] = CRGB::Black;
+        //        FastLED.show();
+        turnOnRGBByState (0, 0, 0, lastrgbState, 0);
         rgbState = 1;
         break;
       case 1:
         Serial.println("case 1");
 
         if (lastrgbState == 1) {
-          delay(30);
+
+          //delay(30);
           isDebugTruePrintToSerial("case  1");
           isDebugTruePrintToSerial("lastrgbState");
           isDebugTruePrintToSerial(lastrgbState + "");
 
           isDebugTruePrintToSerial("rgbState black");
           isDebugTruePrintToSerial(rgbState + "");
-          FastLED.clear();
-          leds[1] = CRGB::Black;
-          FastLED.show();
+
+          //turnOnRGBByState (0, 0, 0, lastrgbState, 1);
+          //          FastLED.clear();
+          //          leds[1] = CRGB::Black;
+          //          FastLED.show();
           lastrgbState = 0;
           rgbState = 0;
         } else {
@@ -144,9 +141,9 @@ void press () {
 
           isDebugTruePrintToSerial("rgbState red");
           isDebugTruePrintToSerial(rgbState + "");
-
-          leds[0] = CRGB::Red;
-          FastLED.show();
+          turnOnRGBByState (255, 0, 0, lastrgbState, 0);
+          //          leds[0] = CRGB::Red;
+          //          FastLED.show();
           rgbState = 0;
           isDebugTruePrintToSerial(" new val rgbState red");
           isDebugTruePrintToSerial(rgbState + "");
@@ -160,9 +157,8 @@ void press () {
 
 void setup() {
   Serial.begin(115200);
-  delay(1000);
-  // define the pin mode for each pin used
 
+  // define the pin mode for each pin used
   pinMode(playButton, INPUT_PULLUP);
   pinMode(fwdButton, INPUT_PULLUP);
   pinMode(backButton, INPUT_PULLUP);
@@ -197,9 +193,8 @@ void setup() {
 void loop() {
 
   //single or double  pressed
-  //-----------------------------------------------------------------------------------------\\
+  //-----------------------------------------------------------------------------------------
   reading = digitalRead(f20Button);
-
   if (reading == HIGH && lastReading == LOW) {
     onTime = millis();
   } else if (reading == LOW && lastReading == HIGH) {
@@ -213,7 +208,7 @@ void loop() {
   }
 
   lastReading = reading;
-  //__________________________________________________________________________________________\\
+  //__________________________________________________________________________________________
 
   // if the play button is pressed
   if (!digitalRead(playButton)) {
