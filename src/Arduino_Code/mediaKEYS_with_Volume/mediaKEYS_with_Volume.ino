@@ -191,8 +191,8 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
   // define the pin mode for each pin used
-  pinMode(pinLed, OUTPUT);
-  digitalWrite(pinLed, LOW);
+  //  pinMode(pinLed, OUTPUT);
+  //  digitalWrite(pinLed, LOW);
 
   pinMode(playButton, INPUT_PULLUP);
   pinMode(fwdButton, INPUT_PULLUP);
@@ -259,28 +259,28 @@ void loop() {
 
   // if the play button is pressed
   if (!digitalRead(playButton)) {
-    digitalWrite(pinLed, HIGH); // turn on LED
+    //  digitalWrite(pinLed, HIGH); // turn on LED
     Consumer.write(MEDIA_PLAY_PAUSE); // send HID command
     isDebugTruePrintToSerial("Play/Pause");
     delay(delayConst250); // wait
-    digitalWrite(pinLed, LOW); // turn off LED
+    // digitalWrite(pinLed, LOW); // turn off LED
   }
 
   // all the buttons follow the same pattern ...
 
   if (!digitalRead(fwdButton)) {
-    digitalWrite(pinLed, HIGH);
+    // digitalWrite(pinLed, HIGH);
     Consumer.write(MEDIA_NEXT);
     isDebugTruePrintToSerial("Next");
     delay(delayConst250);
-    digitalWrite(pinLed, LOW);
+    //digitalWrite(pinLed, LOW);
   }
 
   if (!digitalRead(backButton)) {
-    digitalWrite(pinLed, HIGH);
+    //   // digitalWrite(pinLed, HIGH);
     Consumer.write(MEDIA_PREVIOUS);
     delay(delayConst250);
-    digitalWrite(pinLed, LOW);
+    //   digitalWrite(pinLed, LOW);
   }
 
   if (!digitalRead(volUpButton)) {
@@ -298,11 +298,11 @@ void loop() {
   }
 
   if (!digitalRead(muteButton)) {
-    digitalWrite(pinLed, HIGH);
+    //    digitalWrite(pinLed, HIGH);
     isDebugTruePrintToSerial("Mute");
     Consumer.write(MEDIA_VOLUME_MUTE);
-    delay(2*delayConst250);
-    digitalWrite(pinLed, LOW);
+    delay(2 * delayConst250);
+    //  digitalWrite(pinLed, LOW);
   }
 
 
