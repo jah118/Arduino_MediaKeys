@@ -4,10 +4,81 @@
         <name>Microsoft.Extensions.Logging.Console</name>
     </assembly>
     <members>
-        <member name="T:Microsoft.Extensions.Logging.Console.Internal.AnsiLogConsole">
+        <member name="T:Microsoft.Extensions.Logging.Console.AnsiLogConsole">
             <summary>
             For non-Windows platform consoles which understand the ANSI escape code sequences to represent color
             </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Console.AnsiSystemConsole.#ctor(System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.Console.ConsoleLoggerFormat">
+            <summary>
+            Format of <see cref="T:Microsoft.Extensions.Logging.Console.ConsoleLogger" /> messages.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.Console.ConsoleLoggerFormat.Default">
+            <summary>
+            Produces messages in the default console format.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.Console.ConsoleLoggerFormat.Systemd">
+            <summary>
+            Produces messages in a format suitable for console output to the systemd journal.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.Console.ConsoleLoggerOptions">
+            <summary>
+            Options for a <see cref="T:Microsoft.Extensions.Logging.Console.ConsoleLogger"/>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.Console.ConsoleLoggerOptions.IncludeScopes">
+            <summary>
+            Includes scopes when <code>true</code>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.Console.ConsoleLoggerOptions.DisableColors">
+            <summary>
+            Disables colors when <code>true</code>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.Console.ConsoleLoggerOptions.Format">
+            <summary>
+            Gets or sets log message format. Defaults to <see cref="F:Microsoft.Extensions.Logging.Console.ConsoleLoggerFormat.Default" />.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.Console.ConsoleLoggerOptions.LogToStandardErrorThreshold">
+            <summary>
+            Gets or sets value indicating the minimum level of messaged that would get written to <c>Console.Error</c>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.Console.ConsoleLoggerOptions.TimestampFormat">
+            <summary>
+            Gets or sets format string used to format timestamp in logging messages. Defaults to <c>null</c>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider">
+            <summary>
+            A provider of <see cref="T:Microsoft.Extensions.Logging.Console.ConsoleLogger"/> instances.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider.#ctor(Microsoft.Extensions.Options.IOptionsMonitor{Microsoft.Extensions.Logging.Console.ConsoleLoggerOptions})">
+            <summary>
+            Creates an instance of <see cref="T:Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider"/>.
+            </summary>
+            <param name="options">The options to create <see cref="T:Microsoft.Extensions.Logging.Console.ConsoleLogger"/> instances with.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider.CreateLogger(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Console.ConsoleLoggerProvider.SetScopeProvider(Microsoft.Extensions.Logging.IExternalScopeProvider)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Console.WindowsLogConsole.#ctor(System.Boolean)">
+            <inheritdoc />
         </member>
         <member name="M:Microsoft.Extensions.Logging.ConsoleLoggerExtensions.AddConsole(Microsoft.Extensions.Logging.ILoggingBuilder)">
             <summary>
@@ -20,67 +91,31 @@
             Adds a console logger named 'Console' to the factory.
             </summary>
             <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to use.</param>
-            <param name="configure"></param>
+            <param name="configure">A delegate to configure the <see cref="T:Microsoft.Extensions.Logging.Console.ConsoleLogger"/>.</param>
         </member>
-        <member name="M:Microsoft.Extensions.Logging.ConsoleLoggerExtensions.AddConsole(Microsoft.Extensions.Logging.ILoggerFactory)">
+        <member name="T:Microsoft.Extensions.Logging.NullExternalScopeProvider">
             <summary>
-            Adds a console logger that is enabled for <see cref="T:Microsoft.Extensions.Logging.LogLevel"/>.Information or higher.
+            Scope provider that does nothing.
             </summary>
-            <param name="factory">The <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to use.</param>
         </member>
-        <member name="M:Microsoft.Extensions.Logging.ConsoleLoggerExtensions.AddConsole(Microsoft.Extensions.Logging.ILoggerFactory,System.Boolean)">
+        <member name="P:Microsoft.Extensions.Logging.NullExternalScopeProvider.Instance">
             <summary>
-            Adds a console logger that is enabled for <see cref="T:Microsoft.Extensions.Logging.LogLevel"/>.Information or higher.
+            Returns a cached instance of <see cref="T:Microsoft.Extensions.Logging.NullExternalScopeProvider"/>.
             </summary>
-            <param name="factory">The <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to use.</param>
-            <param name="includeScopes">A value which indicates whether log scope information should be displayed
-            in the output.</param>
         </member>
-        <member name="M:Microsoft.Extensions.Logging.ConsoleLoggerExtensions.AddConsole(Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Logging.LogLevel)">
-            <summary>
-            Adds a console logger that is enabled for <see cref="T:Microsoft.Extensions.Logging.LogLevel"/>s of minLevel or higher.
-            </summary>
-            <param name="factory">The <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to use.</param>
-            <param name="minLevel">The minimum <see cref="T:Microsoft.Extensions.Logging.LogLevel"/> to be logged</param>
+        <member name="M:Microsoft.Extensions.Logging.NullExternalScopeProvider.Microsoft#Extensions#Logging#IExternalScopeProvider#ForEachScope``1(System.Action{System.Object,``0},``0)">
+            <inheritdoc />
         </member>
-        <member name="M:Microsoft.Extensions.Logging.ConsoleLoggerExtensions.AddConsole(Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Logging.LogLevel,System.Boolean)">
-            <summary>
-            Adds a console logger that is enabled for <see cref="T:Microsoft.Extensions.Logging.LogLevel"/>s of minLevel or higher.
-            </summary>
-            <param name="factory">The <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to use.</param>
-            <param name="minLevel">The minimum <see cref="T:Microsoft.Extensions.Logging.LogLevel"/> to be logged</param>
-            <param name="includeScopes">A value which indicates whether log scope information should be displayed
-            in the output.</param>
+        <member name="M:Microsoft.Extensions.Logging.NullExternalScopeProvider.Microsoft#Extensions#Logging#IExternalScopeProvider#Push(System.Object)">
+            <inheritdoc />
         </member>
-        <member name="M:Microsoft.Extensions.Logging.ConsoleLoggerExtensions.AddConsole(Microsoft.Extensions.Logging.ILoggerFactory,System.Func{System.String,Microsoft.Extensions.Logging.LogLevel,System.Boolean})">
+        <member name="T:Microsoft.Extensions.Logging.NullScope">
             <summary>
-            Adds a console logger that is enabled as defined by the filter function.
+            An empty scope without any logic
             </summary>
-            <param name="factory">The <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to use.</param>
-            <param name="filter">The category filter to apply to logs.</param>
         </member>
-        <member name="M:Microsoft.Extensions.Logging.ConsoleLoggerExtensions.AddConsole(Microsoft.Extensions.Logging.ILoggerFactory,System.Func{System.String,Microsoft.Extensions.Logging.LogLevel,System.Boolean},System.Boolean)">
-            <summary>
-            Adds a console logger that is enabled as defined by the filter function.
-            </summary>
-            <param name="factory">The <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to use.</param>
-            <param name="filter">The category filter to apply to logs.</param>
-            <param name="includeScopes">A value which indicates whether log scope information should be displayed
-            in the output.</param>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.ConsoleLoggerExtensions.AddConsole(Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Logging.Console.IConsoleLoggerSettings)">
-            <summary>
-            </summary>
-            <param name="factory">The <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to use.</param>
-            <param name="settings">The settings to apply to created <see cref="T:Microsoft.Extensions.Logging.Console.ConsoleLogger"/>'s.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.ConsoleLoggerExtensions.AddConsole(Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Configuration.IConfiguration)">
-            <summary>
-            </summary>
-            <param name="factory">The <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to use.</param>
-            <param name="configuration">The <see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/> to use for <see cref="T:Microsoft.Extensions.Logging.Console.IConsoleLoggerSettings"/>.</param>
-            <returns></returns>
+        <member name="M:Microsoft.Extensions.Logging.NullScope.Dispose">
+            <inheritdoc />
         </member>
     </members>
 </doc>

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpotifyApiToSerial", "Spoti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spotifyApi", "spotifyApi\spotifyApi.csproj", "{D1728C06-F661-49E2-A817-B4A9BB3F7A6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lib", "Lib\Lib.csproj", "{6996DBDB-C578-411B-9F30-B7EA5C500027}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D1728C06-F661-49E2-A817-B4A9BB3F7A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1728C06-F661-49E2-A817-B4A9BB3F7A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1728C06-F661-49E2-A817-B4A9BB3F7A6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6996DBDB-C578-411B-9F30-B7EA5C500027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6996DBDB-C578-411B-9F30-B7EA5C500027}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6996DBDB-C578-411B-9F30-B7EA5C500027}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6996DBDB-C578-411B-9F30-B7EA5C500027}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

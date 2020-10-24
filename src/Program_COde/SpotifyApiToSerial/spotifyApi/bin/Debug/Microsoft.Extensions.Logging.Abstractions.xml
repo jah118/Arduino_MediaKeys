@@ -4,6 +4,72 @@
         <name>Microsoft.Extensions.Logging.Abstractions</name>
     </assembly>
     <members>
+        <member name="T:Microsoft.Extensions.Logging.EventId">
+            <summary>
+            Identifies a logging event. The primary identifier is the "Id" property, with the "Name" property providing a short description of this type of event.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.EventId.op_Implicit(System.Int32)~Microsoft.Extensions.Logging.EventId">
+            <summary>
+            Implicitly creates an EventId from the given <see cref="T:System.Int32"/>.
+            </summary>
+            <param name="i">The <see cref="T:System.Int32"/> to convert to an EventId.</param>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.EventId.op_Equality(Microsoft.Extensions.Logging.EventId,Microsoft.Extensions.Logging.EventId)">
+            <summary>
+            Checks if two specified <see cref="T:Microsoft.Extensions.Logging.EventId"/> instances have the same value. They are equal if they have the same Id.
+            </summary>
+            <param name="left">The first <see cref="T:Microsoft.Extensions.Logging.EventId"/>.</param>
+            <param name="right">The second <see cref="T:Microsoft.Extensions.Logging.EventId"/>.</param>
+            <returns><code>true</code> if the objects are equal.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.EventId.op_Inequality(Microsoft.Extensions.Logging.EventId,Microsoft.Extensions.Logging.EventId)">
+            <summary>
+            Checks if two specified <see cref="T:Microsoft.Extensions.Logging.EventId"/> instances have different values.
+            </summary>
+            <param name="left">The first <see cref="T:Microsoft.Extensions.Logging.EventId"/>.</param>
+            <param name="right">The second <see cref="T:Microsoft.Extensions.Logging.EventId"/>.</param>
+            <returns><code>true</code> if the objects are not equal.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.EventId.#ctor(System.Int32,System.String)">
+            <summary>
+            Initializes an instance of the <see cref="T:Microsoft.Extensions.Logging.EventId"/> struct.
+            </summary>
+            <param name="id">The numeric identifier for this event.</param>
+            <param name="name">The name of this event.</param>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.EventId.Id">
+            <summary>
+            Gets the numeric identifier for this event.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.EventId.Name">
+            <summary>
+            Gets the name of this event.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.EventId.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.EventId.Equals(Microsoft.Extensions.Logging.EventId)">
+            <summary>
+            Indicates whether the current object is equal to another object of the same type. Two events are equal if they have the same id.
+            </summary>
+            <param name="other">An object to compare with this object.</param>
+            <returns><code>true</code> if the current object is equal to the other parameter; otherwise, <code>false</code>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.EventId.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.EventId.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.FormattedLogValues">
+            <summary>
+            LogValues to enable formatting options supported by <see cref="M:string.Format"/>.
+            This also enables using {NamedformatItem} in the format string.
+            </summary>
+        </member>
         <member name="T:Microsoft.Extensions.Logging.IExternalScopeProvider">
             <summary>
             Represents a storage of common scope data.
@@ -16,7 +82,7 @@
             </summary>
             <param name="callback">The callback to be executed for every scope object</param>
             <param name="state">The state object to be passed into the callback</param>
-            <typeparam name="TState"></typeparam>
+            <typeparam name="TState">The type of state to accept.</typeparam>
         </member>
         <member name="M:Microsoft.Extensions.Logging.IExternalScopeProvider.Push(System.Object)">
             <summary>
@@ -39,7 +105,8 @@
             <param name="eventId">Id of the event.</param>
             <param name="state">The entry to be written. Can be also an object.</param>
             <param name="exception">The exception related to this entry.</param>
-            <param name="formatter">Function to create a <c>string</c> message of the <paramref name="state"/> and <paramref name="exception"/>.</param>
+            <param name="formatter">Function to create a <see cref="T:System.String"/> message of the <paramref name="state"/> and <paramref name="exception"/>.</param>
+            <typeparam name="TState">The type of the object to be written.</typeparam>
         </member>
         <member name="M:Microsoft.Extensions.Logging.ILogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
             <summary>
@@ -53,7 +120,8 @@
             Begins a logical operation scope.
             </summary>
             <param name="state">The identifier for the scope.</param>
-            <returns>An IDisposable that ends the logical operation scope on dispose.</returns>
+            <typeparam name="TState">The type of the state to begin scope for.</typeparam>
+            <returns>An <see cref="T:System.IDisposable"/> that ends the logical operation scope on dispose.</returns>
         </member>
         <member name="T:Microsoft.Extensions.Logging.ILoggerFactory">
             <summary>
@@ -74,14 +142,6 @@
             </summary>
             <param name="provider">The <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/>.</param>
         </member>
-        <member name="T:Microsoft.Extensions.Logging.ILogger`1">
-            <summary>
-            A generic interface for logging where the category name is derived from the specified
-            <typeparamref name="TCategoryName"/> type name.
-            Generally used to enable activation of a named <see cref="T:Microsoft.Extensions.Logging.ILogger"/> from dependency injection.
-            </summary>
-            <typeparam name="TCategoryName">The type who's name is used for the logger category name.</typeparam>
-        </member>
         <member name="T:Microsoft.Extensions.Logging.ILoggerProvider">
             <summary>
             Represents a type that can create instances of <see cref="T:Microsoft.Extensions.Logging.ILogger"/>.
@@ -92,96 +152,15 @@
             Creates a new <see cref="T:Microsoft.Extensions.Logging.ILogger"/> instance.
             </summary>
             <param name="categoryName">The category name for messages produced by the logger.</param>
-            <returns></returns>
+            <returns>The instance of <see cref="T:Microsoft.Extensions.Logging.ILogger"/> that was created.</returns>
         </member>
-        <member name="T:Microsoft.Extensions.Logging.Internal.FormattedLogValues">
+        <member name="T:Microsoft.Extensions.Logging.ILogger`1">
             <summary>
-            LogValues to enable formatting options supported by <see cref="M:string.Format"/>.
-            This also enables using {NamedformatItem} in the format string.
+            A generic interface for logging where the category name is derived from the specified
+            <typeparamref name="TCategoryName"/> type name.
+            Generally used to enable activation of a named <see cref="T:Microsoft.Extensions.Logging.ILogger"/> from dependency injection.
             </summary>
-        </member>
-        <member name="T:Microsoft.Extensions.Logging.Internal.LogValuesFormatter">
-            <summary>
-            Formatter to convert the named format items like {NamedformatItem} to <see cref="M:string.Format"/> format.
-            </summary>
-        </member>
-        <member name="T:Microsoft.Extensions.Logging.Abstractions.Internal.NullScope">
-            <summary>
-            An empty scope without any logic
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.Internal.NullScope.Dispose">
-            <inheritdoc />
-        </member>
-        <member name="T:Microsoft.Extensions.Logging.Abstractions.NullLogger">
-            <summary>
-            Minimalistic logger that does nothing.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger.BeginScope``1(``0)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
-            <inheritdoc />
-        </member>
-        <member name="T:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory">
-            <summary>
-            An <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> used to create instance of
-            <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLogger"/> that logs nothing.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.CreateLogger(System.String)">
-            <inheritdoc />
-            <remarks>
-            This returns a <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLogger"/> instance which logs nothing.
-            </remarks>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.AddProvider(Microsoft.Extensions.Logging.ILoggerProvider)">
-            <inheritdoc />
-            <remarks>
-            This method ignores the parameter and does nothing.
-            </remarks>
-        </member>
-        <member name="T:Microsoft.Extensions.Logging.Abstractions.NullLogger`1">
-            <summary>
-            Minimalistic logger that does nothing.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger`1.BeginScope``1(``0)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger`1.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
-            <inheritdoc />
-            <remarks>
-            This method ignores the parameters and does nothing.
-            </remarks>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger`1.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
-            <inheritdoc />
-        </member>
-        <member name="T:Microsoft.Extensions.Logging.Abstractions.NullLoggerProvider">
-            <summary>
-            Provider for the <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLogger"/>.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerProvider.CreateLogger(System.String)">
-            <inheritdoc />
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerProvider.Dispose">
-            <inheritdoc />
-        </member>
-        <member name="P:Microsoft.Extensions.Logging.Abstractions.Resource.UnexpectedNumberOfNamedParameters">
-            <summary>
-            The format string '{0}' does not have the expected number of named parameters. Expected {1} parameter(s) but found {2} parameter(s).
-            </summary>
-        </member>
-        <member name="M:Microsoft.Extensions.Logging.Abstractions.Resource.FormatUnexpectedNumberOfNamedParameters(System.Object,System.Object,System.Object)">
-            <summary>
-            The format string '{0}' does not have the expected number of named parameters. Expected {1} parameter(s) but found {2} parameter(s).
-            </summary>
+            <typeparam name="TCategoryName">The type who's name is used for the logger category name.</typeparam>
         </member>
         <member name="T:Microsoft.Extensions.Logging.ISupportExternalScope">
             <summary>
@@ -192,7 +171,7 @@
             <summary>
             Sets external scope information source for logger provider.
             </summary>
-            <param name="scopeProvider"></param>
+            <param name="scopeProvider">The provider of scope data.</param>
         </member>
         <member name="T:Microsoft.Extensions.Logging.LoggerExtensions">
             <summary>
@@ -495,7 +474,12 @@
         </member>
         <member name="T:Microsoft.Extensions.Logging.LoggerExternalScopeProvider">
             <summary>
-            Default implemenation of <see cref="T:Microsoft.Extensions.Logging.IExternalScopeProvider"/>
+            Default implementation of <see cref="T:Microsoft.Extensions.Logging.IExternalScopeProvider"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.LoggerExternalScopeProvider.#ctor">
+            <summary>
+            Creates a new <see cref="T:Microsoft.Extensions.Logging.LoggerExternalScopeProvider"/>.
             </summary>
         </member>
         <member name="M:Microsoft.Extensions.Logging.LoggerExternalScopeProvider.ForEachScope``1(System.Action{System.Object,``0},``0)">
@@ -511,17 +495,19 @@
         </member>
         <member name="M:Microsoft.Extensions.Logging.LoggerFactoryExtensions.CreateLogger``1(Microsoft.Extensions.Logging.ILoggerFactory)">
             <summary>
-            Creates a new ILogger instance using the full name of the given type.
+            Creates a new <see cref="T:Microsoft.Extensions.Logging.ILogger"/> instance using the full name of the given type.
             </summary>
-            <typeparam name="T">The type.</typeparam>
             <param name="factory">The factory.</param>
+            <typeparam name="T">The type.</typeparam>
+            <returns>The <see cref="T:Microsoft.Extensions.Logging.ILogger"/> that was created.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Logging.LoggerFactoryExtensions.CreateLogger(Microsoft.Extensions.Logging.ILoggerFactory,System.Type)">
             <summary>
-            Creates a new ILogger instance using the full name of the given type.
+            Creates a new <see cref="T:Microsoft.Extensions.Logging.ILogger"/> instance using the full name of the given <paramref name="type"/>.
             </summary>
             <param name="factory">The factory.</param>
             <param name="type">The type.</param>
+            <return>The <see cref="T:Microsoft.Extensions.Logging.ILogger"/> that was created.</return>
         </member>
         <member name="T:Microsoft.Extensions.Logging.LoggerMessage">
             <summary>
@@ -659,6 +645,15 @@
             </summary>
             <param name="factory">The factory.</param>
         </member>
+        <member name="M:Microsoft.Extensions.Logging.Logger`1.Microsoft#Extensions#Logging#ILogger#BeginScope``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Logger`1.Microsoft#Extensions#Logging#ILogger#IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Logger`1.Microsoft#Extensions#Logging#ILogger#Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
+            <inheritdoc />
+        </member>
         <member name="T:Microsoft.Extensions.Logging.LogLevel">
             <summary>
             Defines logging severity levels.
@@ -703,6 +698,141 @@
             <summary>
             Not used for writing log messages. Specifies that a logging category should not write any messages.
             </summary>
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.LogValuesFormatter">
+            <summary>
+            Formatter to convert the named format items like {NamedformatItem} to <see cref="M:string.Format"/> format.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.Abstractions.NullLogger">
+            <summary>
+            Minimalistic logger that does nothing.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.Abstractions.NullLogger.Instance">
+            <summary>
+            Returns the shared instance of <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLogger"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger.BeginScope``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory">
+            <summary>
+            An <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> used to create instance of
+            <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLogger"/> that logs nothing.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.#ctor">
+            <summary>
+            Creates a new <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory"/> instance.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.Instance">
+            <summary>
+            Returns the shared instance of <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.CreateLogger(System.String)">
+            <inheritdoc />
+            <remarks>
+            This returns a <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLogger"/> instance which logs nothing.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.AddProvider(Microsoft.Extensions.Logging.ILoggerProvider)">
+            <inheritdoc />
+            <remarks>
+            This method ignores the parameter and does nothing.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerFactory.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.Abstractions.NullLoggerProvider">
+            <summary>
+            Provider for the <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLogger"/>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.Abstractions.NullLoggerProvider.Instance">
+            <summary>
+            Returns an instance of <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLoggerProvider"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerProvider.CreateLogger(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLoggerProvider.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.Abstractions.NullLogger`1">
+            <summary>
+            Minimalistic logger that does nothing.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.Abstractions.NullLogger`1.Instance">
+            <summary>
+            Returns an instance of <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLogger`1"/>.
+            </summary>
+            <returns>An instance of <see cref="T:Microsoft.Extensions.Logging.Abstractions.NullLogger`1"/>.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger`1.BeginScope``1(``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger`1.Log``1(Microsoft.Extensions.Logging.LogLevel,Microsoft.Extensions.Logging.EventId,``0,System.Exception,System.Func{``0,System.Exception,System.String})">
+            <inheritdoc />
+            <remarks>
+            This method ignores the parameters and does nothing.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.NullLogger`1.IsEnabled(Microsoft.Extensions.Logging.LogLevel)">
+            <inheritdoc />
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.Abstractions.Resource.UnexpectedNumberOfNamedParameters">
+            <summary>The format string '{0}' does not have the expected number of named parameters. Expected {1} parameter(s) but found {2} parameter(s).</summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.Abstractions.Resource.FormatUnexpectedNumberOfNamedParameters(System.Object,System.Object,System.Object)">
+            <summary>The format string '{0}' does not have the expected number of named parameters. Expected {1} parameter(s) but found {2} parameter(s).</summary>
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.NullExternalScopeProvider">
+            <summary>
+            Scope provider that does nothing.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.NullExternalScopeProvider.Instance">
+            <summary>
+            Returns a cached instance of <see cref="T:Microsoft.Extensions.Logging.NullExternalScopeProvider"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.NullExternalScopeProvider.Microsoft#Extensions#Logging#IExternalScopeProvider#ForEachScope``1(System.Action{System.Object,``0},``0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.NullExternalScopeProvider.Microsoft#Extensions#Logging#IExternalScopeProvider#Push(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.NullScope">
+            <summary>
+            An empty scope without any logic
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.NullScope.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:Microsoft.Extensions.Internal.TypeNameHelper.GetTypeDisplayName(System.Type,System.Boolean,System.Boolean,System.Boolean,System.Char)">
+            <summary>
+            Pretty print a type name.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/>.</param>
+            <param name="fullName"><c>true</c> to print a fully qualified name.</param>
+            <param name="includeGenericParameterNames"><c>true</c> to include generic parameter names.</param>
+            <param name="includeGenericParameters"><c>true</c> to include generic parameters.</param>
+            <param name="nestedTypeDelimiter">Character to use as a delimiter in nested type names</param>
+            <returns>The pretty printed type name.</returns>
         </member>
     </members>
 </doc>

@@ -104,32 +104,6 @@
             <param name="state">State to be passed into the callback.</param>
             <returns>An <see cref="T:System.IDisposable"/> that is used to unregister the callback.</returns>
         </member>
-        <member name="T:Microsoft.Extensions.Primitives.Resources">
-            <summary>
-               A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:Microsoft.Extensions.Primitives.Resources.ResourceManager">
-            <summary>
-               Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:Microsoft.Extensions.Primitives.Resources.Culture">
-            <summary>
-               Overrides the current thread's CurrentUICulture property for all
-               resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="P:Microsoft.Extensions.Primitives.Resources.Argument_InvalidOffsetLength">
-            <summary>
-               Looks up a localized string similar to Offset and length are out of bounds for the string or length is greater than the number of characters from index to the end of the string..
-            </summary>
-        </member>
-        <member name="P:Microsoft.Extensions.Primitives.Resources.Capacity_CannotChangeAfterWriteStarted">
-            <summary>
-               Looks up a localized string similar to Cannot change capacity after write started..
-            </summary>
-        </member>
         <member name="T:Microsoft.Extensions.Primitives.StringSegment">
             <summary>
             An optimized representation of a substring.
@@ -155,6 +129,13 @@
             <param name="buffer">The original <see cref="T:System.String"/> used as buffer.</param>
             <param name="offset">The offset of the segment within the <paramref name="buffer"/>.</param>
             <param name="length">The length of the segment.</param>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="buffer"/> is <code>null</code>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="offset"/> or <paramref name="length"/> is less than zero, or <paramref name="offset"/> +
+            <paramref name="length"/> is greater than the number of characters in <paramref name="buffer"/>.
+            </exception>
         </member>
         <member name="P:Microsoft.Extensions.Primitives.StringSegment.Buffer">
             <summary>
@@ -178,7 +159,7 @@
         </member>
         <member name="P:Microsoft.Extensions.Primitives.StringSegment.HasValue">
             <summary>
-            Gets whether or not this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> contains a valid value.
+            Gets whether this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> contains a valid value.
             </summary>
         </member>
         <member name="P:Microsoft.Extensions.Primitives.StringSegment.Item(System.Int32)">
@@ -187,6 +168,9 @@
             </summary>
             <param name="index">The offset into the <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/></param>
             <returns>The <see cref="T:System.Char"/> at a specified position.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="index"/> is greater than or equal to <see cref="P:Microsoft.Extensions.Primitives.StringSegment.Length"/> or less than zero.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.AsSpan">
             <summary>
@@ -205,8 +189,8 @@
             Compares substrings of two specified <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> objects using the specified rules,
             and returns an integer that indicates their relative position in the sort order.
             </summary>
-            <param name="a">The first StringSegment to compare.</param>
-            <param name="b">The second StringSegment to compare.</param>
+            <param name="a">The first <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> to compare.</param>
+            <param name="b">The second <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> to compare.</param>
             <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
             <returns>
             A 32-bit signed integer indicating the lexical relationship between the two comparands.
@@ -234,11 +218,11 @@
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.Equals(Microsoft.Extensions.Primitives.StringSegment,Microsoft.Extensions.Primitives.StringSegment,System.StringComparison)">
             <summary>
-            Determines whether two specified StringSegment objects have the same value. A parameter specifies the culture, case, and
+            Determines whether two specified <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> objects have the same value. A parameter specifies the culture, case, and
             sort rules used in the comparison.
             </summary>
-            <param name="a">The first StringSegment to compare.</param>
-            <param name="b">The second StringSegment to compare.</param>
+            <param name="a">The first <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> to compare.</param>
+            <param name="b">The second <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> to compare.</param>
             <param name="comparisonType">One of the enumeration values that specifies the rules for the comparison.</param>
             <returns><code>true</code> if the objects are equal; otherwise, <code>false</code>.</returns>
         </member>
@@ -256,14 +240,12 @@
             <param name="text">The <see cref="T:System.String"/> to compare with the current <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>.</param>
             <param name="comparisonType">One of the enumeration values that specifies the rules to use in the comparison.</param>
             <returns><code>true</code> if the specified <see cref="T:System.String"/> is equal to the current <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>; otherwise, <code>false</code>.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="text"/> is <code>null</code>.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.GetHashCode">
             <inheritdoc />
-            <remarks>
-            This GetHashCode is expensive since it allocates on every call.
-            However this is required to ensure we retain any behavior (such as hash code randomization) that
-            string.GetHashCode has.
-            </remarks>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.op_Equality(Microsoft.Extensions.Primitives.StringSegment,Microsoft.Extensions.Primitives.StringSegment)">
             <summary>
@@ -306,6 +288,9 @@
             <param name="text">The <see cref="T:System.String"/>to compare.</param>
             <param name="comparisonType">One of the enumeration values that specifies the rules to use in the comparison.</param>
             <returns><code>true</code> if <paramref name="text"/> matches the beginning of this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>; otherwise, <code>false</code>.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="text"/> is <code>null</code>.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.EndsWith(System.String,System.StringComparison)">
             <summary>
@@ -314,6 +299,9 @@
             <param name="text">The <see cref="T:System.String"/>to compare.</param>
             <param name="comparisonType">One of the enumeration values that specifies the rules to use in the comparison.</param>
             <returns><code>true</code> if <paramref name="text"/> matches the end of this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>; otherwise, <code>false</code>.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="text"/> is <code>null</code>.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.Substring(System.Int32)">
             <summary>
@@ -323,6 +311,9 @@
             <param name="offset">The zero-based starting character position of a substring in this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>.</param>
             <returns>A <see cref="T:System.String"/> that is equivalent to the substring of remaining length that begins at
             <paramref name="offset"/> in this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/></returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="offset"/> is greater than or equal to <see cref="P:Microsoft.Extensions.Primitives.StringSegment.Length"/> or less than zero.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.Substring(System.Int32,System.Int32)">
             <summary>
@@ -333,6 +324,10 @@
             <param name="length">The number of characters in the substring.</param>
             <returns>A <see cref="T:System.String"/> that is equivalent to the substring of length <paramref name="length"/> that begins at
             <paramref name="offset"/> in this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/></returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="offset"/> or <paramref name="length"/> is less than zero, or <paramref name="offset"/> + <paramref name="length"/> is
+            greater than <see cref="P:Microsoft.Extensions.Primitives.StringSegment.Length"/>.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.Subsegment(System.Int32)">
             <summary>
@@ -342,6 +337,9 @@
             <param name="offset">The zero-based starting character position of a substring in this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>.</param>
             <returns>A <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> that begins at <paramref name="offset"/> in this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>
             whose length is the remainder.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="offset"/> is greater than or equal to <see cref="P:Microsoft.Extensions.Primitives.StringSegment.Length"/> or less than zero.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.Subsegment(System.Int32,System.Int32)">
             <summary>
@@ -351,6 +349,10 @@
             <param name="offset">The zero-based starting character position of a substring in this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>.</param>
             <param name="length">The number of characters in the substring.</param>
             <returns>A <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> that is equivalent to the substring of length <paramref name="length"/> that begins at <paramref name="offset"/> in this <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/></returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="offset"/> or <paramref name="length"/> is less than zero, or <paramref name="offset"/> + <paramref name="length"/> is
+            greater than <see cref="P:Microsoft.Extensions.Primitives.StringSegment.Length"/>.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.IndexOf(System.Char,System.Int32,System.Int32)">
             <summary>
@@ -361,6 +363,10 @@
             <param name="start">The zero-based index position at which the search starts. </param>
             <param name="count">The number of characters to examine.</param>
             <returns>The zero-based index position of <paramref name="c"/> from the beginning of the <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> if that character is found, or -1 if it is not.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="start"/> or <paramref name="count"/> is less than zero, or <paramref name="start"/> + <paramref name="count"/> is
+            greater than <see cref="P:Microsoft.Extensions.Primitives.StringSegment.Length"/>.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.IndexOf(System.Char,System.Int32)">
             <summary>
@@ -370,6 +376,9 @@
             <param name="c">The Unicode character to seek.</param>
             <param name="start">The zero-based index position at which the search starts. </param>
             <returns>The zero-based index position of <paramref name="c"/> from the beginning of the <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> if that character is found, or -1 if it is not.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="start"/> is greater than or equal to <see cref="P:Microsoft.Extensions.Primitives.StringSegment.Length"/> or less than zero.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.IndexOf(System.Char)">
             <summary>
@@ -387,8 +396,15 @@
             <param name="anyOf">A Unicode character array containing one or more characters to seek.</param>
             <param name="startIndex">The search starting position.</param>
             <param name="count">The number of character positions to examine.</param>
-            <returns>The zero-based index position of the first occurrence in this instance where any character in anyOf
-            was found; -1 if no character in anyOf was found.</returns>
+            <returns>The zero-based index position of the first occurrence in this instance where any character in <paramref name="anyOf"/>
+            was found; -1 if no character in <paramref name="anyOf"/> was found.</returns>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="anyOf"/> is <code>null</code>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="startIndex"/> or <paramref name="count"/> is less than zero, or <paramref name="startIndex"/> + <paramref name="count"/> is
+            greater than <see cref="P:Microsoft.Extensions.Primitives.StringSegment.Length"/>.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.IndexOfAny(System.Char[],System.Int32)">
             <summary>
@@ -397,8 +413,11 @@
             </summary>
             <param name="anyOf">A Unicode character array containing one or more characters to seek.</param>
             <param name="startIndex">The search starting position.</param>
-            <returns>The zero-based index position of the first occurrence in this instance where any character in anyOf
-            was found; -1 if no character in anyOf was found.</returns>
+            <returns>The zero-based index position of the first occurrence in this instance where any character in <paramref name="anyOf"/>
+            was found; -1 if no character in <paramref name="anyOf"/> was found.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <paramref name="startIndex"/> is greater than or equal to <see cref="P:Microsoft.Extensions.Primitives.StringSegment.Length"/> or less than zero.
+            </exception>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.IndexOfAny(System.Char[])">
             <summary>
@@ -406,8 +425,8 @@
             of Unicode characters.
             </summary>
             <param name="anyOf">A Unicode character array containing one or more characters to seek.</param>
-            <returns>The zero-based index position of the first occurrence in this instance where any character in anyOf
-            was found; -1 if no character in anyOf was found.</returns>
+            <returns>The zero-based index position of the first occurrence in this instance where any character in <paramref name="anyOf"/>
+            was found; -1 if no character in <paramref name="anyOf"/> was found.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.LastIndexOf(System.Char)">
             <summary>
@@ -436,18 +455,18 @@
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.Split(System.Char[])">
             <summary>
-            Splits a string into StringSegments that are based on the characters in an array.
+            Splits a string into <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>s that are based on the characters in an array.
             </summary>
             <param name="chars">A character array that delimits the substrings in this string, an empty array that
             contains no delimiters, or null.</param>
-            <returns>An <see cref="T:Microsoft.Extensions.Primitives.StringTokenizer"/> whose elements contain the StringSegmeents from this instance
-            that are delimited by one or more characters in separator.</returns>
+            <returns>An <see cref="T:Microsoft.Extensions.Primitives.StringTokenizer"/> whose elements contain the <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>s from this instance
+            that are delimited by one or more characters in <paramref name="chars"/>.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.IsNullOrEmpty(Microsoft.Extensions.Primitives.StringSegment)">
             <summary>
-            Indicates whether the specified StringSegment is null or an Empty string.
+            Indicates whether the specified <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> is null or an Empty string.
             </summary>
-            <param name="value">The StringSegment to test.</param>
+            <param name="value">The <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> to test.</param>
             <returns></returns>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringSegment.ToString">
@@ -458,27 +477,48 @@
         </member>
         <member name="T:Microsoft.Extensions.Primitives.StringTokenizer">
             <summary>
-            Tokenizes a <c>string</c> into <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>s.
+            Tokenizes a <see cref="T:System.String"/> into <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/>s.
             </summary>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringTokenizer.#ctor(System.String,System.Char[])">
             <summary>
             Initializes a new instance of <see cref="T:Microsoft.Extensions.Primitives.StringTokenizer"/>.
             </summary>
-            <param name="value">The <c>string</c> to tokenize.</param>
+            <param name="value">The <see cref="T:System.String"/> to tokenize.</param>
             <param name="separators">The characters to tokenize by.</param>
         </member>
         <member name="M:Microsoft.Extensions.Primitives.StringTokenizer.#ctor(Microsoft.Extensions.Primitives.StringSegment,System.Char[])">
             <summary>
             Initializes a new instance of <see cref="T:Microsoft.Extensions.Primitives.StringTokenizer"/>.
             </summary>
-            <param name="value">The <c>StringSegment</c> to tokenize.</param>
+            <param name="value">The <see cref="T:Microsoft.Extensions.Primitives.StringSegment"/> to tokenize.</param>
             <param name="separators">The characters to tokenize by.</param>
         </member>
         <member name="T:Microsoft.Extensions.Primitives.StringValues">
             <summary>
             Represents zero/null, one, or many strings in an efficient way.
             </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Primitives.Resources.Argument_InvalidOffsetLength">
+            <summary>Offset and length are out of bounds for the string or length is greater than the number of characters from index to the end of the string.</summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Primitives.Resources.Argument_InvalidOffsetLengthStringSegment">
+            <summary>Offset and length are out of bounds for this StringSegment or length is greater than the number of characters to the end of this StringSegment.</summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Primitives.Resources.Capacity_CannotChangeAfterWriteStarted">
+            <summary>Cannot change capacity after write started.</summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Primitives.Resources.Capacity_NotEnough">
+            <summary>Not enough capacity to write '{0}' characters, only '{1}' left.</summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Primitives.Resources.FormatCapacity_NotEnough(System.Object,System.Object)">
+            <summary>Not enough capacity to write '{0}' characters, only '{1}' left.</summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Primitives.Resources.Capacity_NotUsedEntirely">
+            <summary>Entire reserved capacity was not used. Capacity: '{0}', written '{1}'.</summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Primitives.Resources.FormatCapacity_NotUsedEntirely(System.Object,System.Object)">
+            <summary>Entire reserved capacity was not used. Capacity: '{0}', written '{1}'.</summary>
         </member>
     </members>
 </doc>

@@ -49,7 +49,6 @@ G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\Spotify
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Microsoft.Extensions.Primitives.dll
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Newtonsoft.Json.dll
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\RJCP.SerialPortStream.dll
-G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\SerialCommunication.exe
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\SpotifyApi.NetCore.dll
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\SpotifyAPI.Web.Auth.dll
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\SpotifyAPI.Web.dll
@@ -60,8 +59,6 @@ G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\Spotify
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Unosquare.Labs.EmbedIO.dll
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Unosquare.Swan.Lite.dll
-G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\SerialCommunication.pdb
-G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\SerialCommunication.exe.config
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Microsoft.Extensions.Caching.Abstractions.xml
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Microsoft.Extensions.Caching.Memory.xml
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Microsoft.Extensions.Configuration.xml
@@ -100,3 +97,16 @@ G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\Spotify
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\obj\Debug\SpotifyApiToSerial.csproj.CopyComplete
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\obj\Debug\SpotifyApiToSerial.exe
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\obj\Debug\SpotifyApiToSerial.pdb
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\EmbedIO.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Microsoft.Extensions.DependencyInjection.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Swan.Lite.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\System.Threading.Tasks.Extensions.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\System.ValueTuple.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\EmbedIO.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Microsoft.Extensions.DependencyInjection.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\Swan.Lite.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\System.Threading.Tasks.Extensions.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\bin\Debug\System.ValueTuple.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\SpotifyApiToSerial\obj\Debug\SpotifyApiToSerial.exe.config

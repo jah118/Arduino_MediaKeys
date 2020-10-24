@@ -53,6 +53,13 @@
             </summary>
             <param name="optionsAccessor">The options of the cache.</param>
         </member>
+        <member name="M:Microsoft.Extensions.Caching.Memory.MemoryCache.#ctor(Microsoft.Extensions.Options.IOptions{Microsoft.Extensions.Caching.Memory.MemoryCacheOptions},Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Creates a new <see cref="T:Microsoft.Extensions.Caching.Memory.MemoryCache"/> instance.
+            </summary>
+            <param name="optionsAccessor">The options of the cache.</param>
+            <param name="loggerFactory">The factory used to create loggers.</param>
+        </member>
         <member name="M:Microsoft.Extensions.Caching.Memory.MemoryCache.Finalize">
             <summary>
             Cleans up the background collection events.

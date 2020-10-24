@@ -77,3 +77,16 @@ G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotify
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.csproj.CopyComplete
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.exe
 G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.pdb
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\EmbedIO.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\Microsoft.Extensions.DependencyInjection.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\Swan.Lite.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\System.Threading.Tasks.Extensions.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\System.ValueTuple.dll
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\EmbedIO.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\Microsoft.Extensions.DependencyInjection.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\Swan.Lite.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\System.Threading.Tasks.Extensions.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\bin\Debug\System.ValueTuple.xml
+G:\dokoment\GitHub\Arduino_MediaKeys\src\Program_COde\SpotifyApiToSerial\spotifyApi\obj\Debug\spotifyApi.csprojAssemblyReference.cache
