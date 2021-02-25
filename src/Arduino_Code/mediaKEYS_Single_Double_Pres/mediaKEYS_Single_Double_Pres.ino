@@ -53,7 +53,7 @@ unsigned int hold = 0;
 long lastSwitchTime = 0;
 long doubleTime = 230; // 150
 
-const int f20Button = 8;
+const int f16Button = 8;
 
 int reading;
 
@@ -206,7 +206,7 @@ void setup() {
 void loop() {
   //single or double  pressed
   //-----------------------------------------------------------------------------------------
-  reading = digitalRead(f20Button);
+  reading = digitalRead(f16Button);
 
   if (reading == HIGH && lastReading == LOW) {
     onTime = millis();
