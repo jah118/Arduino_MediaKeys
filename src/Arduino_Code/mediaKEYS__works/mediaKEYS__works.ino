@@ -35,8 +35,8 @@
 //#define CLK_PIN 4
 #define LED_TYPE WS2811
 #define COLOR_ORDER GRB
-#define NUM_LEDS 4
-#define BRIGHTNESS 32
+#define NUM_LEDS 8
+#define BRIGHTNESS 64
 
 CRGB leds[NUM_LEDS];
 
@@ -53,12 +53,12 @@ unsigned int hold = 0;
 long lastSwitchTime = 0;
 long doubleTime = 230; // 150
 
-const int f20Button = 8;
+const int f20Button = 7;
 int reading;
 
+const int backButton = 4;
 const int playButton = 5;
-const int backButton = 6;
-const int fwdButton = 7;
+const int fwdButton = 6;
 
 const int delayConst75 = 75;
 const int delayConst250 = 250;
@@ -77,6 +77,11 @@ void turnOnRGBByState (int cRed, int cGreen, int cBlue, bool state, int n) {
     case 0:
       FastLED.clear();
       leds[n] = CRGB( cRed, cGreen, cBlue);
+      leds[n+1] = CRGB( cRed, cGreen, cBlue);
+      leds[n+2] = CRGB( cRed, cGreen, cBlue);
+      leds[n+3] = CRGB( cRed, cGreen, cBlue);
+      leds[n+4] = CRGB( cRed, cGreen, cBlue);
+      leds[n+5] = CRGB( cRed, cGreen, cBlue);
       isDebugTruePrintToSerial(state + "");
       isDebugTruePrintToSerial(lastrgbState + "");
       FastLED.show();
