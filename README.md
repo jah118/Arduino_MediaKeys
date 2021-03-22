@@ -3,7 +3,8 @@ This project is to make custom key for windows, as of now it is used for media k
 
 the future for project, is to add a display that can pull information from spotify and display the song and more info as a start. 
 
-#PCB 
+# PCB 
+       
 ![](images/image1.jpg)
-## With old prototype board
+### With old prototype board
 ![](images/image2.jpg)
