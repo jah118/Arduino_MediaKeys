@@ -22,14 +22,13 @@
   https://www.instructables.com/id/USB-Volume-Control-and-Caps-Lock-LED-Simple-Cheap-/
 */
 
-
 // include the HID library
 #include "HID-Project.h"
-#include "FastLED.h" // 
+#include "FastLED.h" //
 
 //rgb
-
 #define DATA_PIN 9
+
 //#define CLK_PIN 4
 #define LED_TYPE WS2811
 #define COLOR_ORDER GRB
@@ -41,13 +40,12 @@ CRGB leds[NUM_LEDS];
 int rgbState = 1;
 int lastrgbState = 0;
 
-
 //test singel or double press of keyy
 
 unsigned long onTime;
 int lastReading = LOW;
 int bounceTime = 35; //50
-int holdTime = 500; //500
+int holdTime = 500;  //500
 unsigned int hold = 0;
 
 long lastSwitchTime = 0;
@@ -59,7 +57,6 @@ int reading;
 
 // definitions for each pin used
 //const int pinLed = LED_BUILTIN;
-
 
 const int volUpButton = 2;
 const int volDwnButton = 3;
@@ -73,98 +70,109 @@ const int delayConst250 = 250;
 
 const bool debugState = true;
 
-void isDebugTruePrintToSerial(String temp) {
-  if (debugState) {
+void isDebugTruePrintToSerial(String temp)
+{
+  if (debugState)
+  {
     Serial.println(temp);
   }
 }
 
-void turnOnRGBByState (int cRed, int cGreen, int cBlue, bool state, int n) {
+void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n)
+{
 
-  switch (state) {
-    case 0:
-      FastLED.clear();
-      leds[n] = CRGB( cRed, cGreen, cBlue);
-      isDebugTruePrintToSerial(state + "");
-      isDebugTruePrintToSerial(lastrgbState + "");
-      FastLED.show();
-      lastrgbState = 0;
-      rgbState = 0;
-      break;
-    case 1:
-      isDebugTruePrintToSerial("reddd");
-      FastLED.clear();
-      isDebugTruePrintToSerial("lastrgbState black");
-      isDebugTruePrintToSerial(lastrgbState + "");
-      leds[2] = CRGB::Black;
-      FastLED.show();
-      lastrgbState = 0;
-      rgbState = 0;
-      break;
+  switch (state)
+  {
+  case 0:
+    FastLED.clear();
+    leds[n] = CRGB(cRed, cGreen, cBlue);
+    isDebugTruePrintToSerial(state + "");
+    isDebugTruePrintToSerial(lastrgbState + "");
+    FastLED.show();
+    lastrgbState = 0;
+    rgbState = 0;
+    break;
+  case 1:
+    isDebugTruePrintToSerial("reddd");
+    FastLED.clear();
+    isDebugTruePrintToSerial("lastrgbState black");
+    isDebugTruePrintToSerial(lastrgbState + "");
+    leds[2] = CRGB::Black;
+    FastLED.show();
+    lastrgbState = 0;
+    rgbState = 0;
+    break;
   }
-
 }
 
-void press () {
-  if ((millis() - lastSwitchTime) < doubleTime) {
+void press()
+{
+  if ((millis() - lastSwitchTime) < doubleTime)
+  {
     isDebugTruePrintToSerial("double press");
 
     BootKeyboard.write(KEY_F16);
-    turnOnRGBByState (0, 0, 250, lastrgbState, 2);
-  }  else if ((millis() - lastSwitchTime) > doubleTime) {
+    turnOnRGBByState(0, 0, 250, lastrgbState, 2);
+  }
+  else if ((millis() - lastSwitchTime) > doubleTime)
+  {
     isDebugTruePrintToSerial("single press");
     BootKeyboard.write(KEY_F19);
-    switch (rgbState) {
-      case 0:
-        isDebugTruePrintToSerial("case 0");
+    switch (rgbState)
+    {
+    case 0:
+      isDebugTruePrintToSerial("case 0");
+      isDebugTruePrintToSerial("lastrgbState");
+      isDebugTruePrintToSerial(lastrgbState + "");
+
+      isDebugTruePrintToSerial("rgbState black");
+      isDebugTruePrintToSerial(rgbState + "");
+      FastLED.clear();
+      leds[0] = CRGB::Black;
+      FastLED.show();
+      rgbState = 1;
+      break;
+    case 1:
+      Serial.println("case 1");
+
+      if (lastrgbState == 1)
+      {
+        delay(30);
+        isDebugTruePrintToSerial("case  1");
         isDebugTruePrintToSerial("lastrgbState");
         isDebugTruePrintToSerial(lastrgbState + "");
 
         isDebugTruePrintToSerial("rgbState black");
         isDebugTruePrintToSerial(rgbState + "");
         FastLED.clear();
-        leds[0] = CRGB::Black;
+        leds[1] = CRGB::Black;
         FastLED.show();
-        rgbState = 1;
-        break;
-      case 1:
-        Serial.println("case 1");
+        lastrgbState = 0;
+        rgbState = 0;
+      }
+      else
+      {
+        isDebugTruePrintToSerial("lastrgbState ffffff");
+        isDebugTruePrintToSerial(lastrgbState + "");
 
-        if (lastrgbState == 1) {
-          delay(30);
-          isDebugTruePrintToSerial("case  1");
-          isDebugTruePrintToSerial("lastrgbState");
-          isDebugTruePrintToSerial(lastrgbState + "");
+        isDebugTruePrintToSerial("rgbState red");
+        isDebugTruePrintToSerial(rgbState + "");
 
-          isDebugTruePrintToSerial("rgbState black");
-          isDebugTruePrintToSerial(rgbState + "");
-          FastLED.clear();
-          leds[1] = CRGB::Black;
-          FastLED.show();
-          lastrgbState = 0;
-          rgbState = 0;
-        } else {
-          isDebugTruePrintToSerial("lastrgbState ffffff");
-          isDebugTruePrintToSerial(lastrgbState + "");
+        leds[0] = CRGB::Red;
+        FastLED.show();
+        rgbState = 0;
+        isDebugTruePrintToSerial(" new val rgbState red");
+        isDebugTruePrintToSerial(rgbState + "");
+      }
 
-          isDebugTruePrintToSerial("rgbState red");
-          isDebugTruePrintToSerial(rgbState + "");
-
-          leds[0] = CRGB::Red;
-          FastLED.show();
-          rgbState = 0;
-          isDebugTruePrintToSerial(" new val rgbState red");
-          isDebugTruePrintToSerial(rgbState + "");
-        }
-
-        break;
+      break;
     }
   }
   lastSwitchTime = millis();
 }
 
-
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   delay(1000);
   // define the pin mode for each pin used
@@ -175,9 +183,8 @@ void setup() {
   pinMode(fwdButton, INPUT_PULLUP);
   pinMode(backButton, INPUT_PULLUP);
 
-
   //press decllare
-  pinMode(f20Button, INPUT_PULLUP );
+  pinMode(f20Button, INPUT_PULLUP);
 
   // begin HID connection
   BootKeyboard.begin();
@@ -186,13 +193,14 @@ void setup() {
   delay(3000); // 3 second delay for recovery
   // tell FastLED about the LED strip configuration
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS)
-  .setCorrection(TypicalLEDStrip)
-  .setDither(BRIGHTNESS < 255);
+      .setCorrection(TypicalLEDStrip)
+      .setDither(BRIGHTNESS < 255);
 
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
 
-  for (int dot = 0; dot < NUM_LEDS; dot++) {
+  for (int dot = 0; dot < NUM_LEDS; dot++)
+  {
 
     FastLED.show();
     // clear this led for the next time around the loop
@@ -203,19 +211,25 @@ void setup() {
   reading = digitalRead(f20Button);
 }
 
-void loop() {
+void loop()
+{
   //single or double  pressed
   //-----------------------------------------------------------------------------------------
   reading = digitalRead(f16Button);
 
-  if (reading == HIGH && lastReading == LOW) {
+  if (reading == HIGH && lastReading == LOW)
+  {
     onTime = millis();
-  } else if (reading == LOW && lastReading == HIGH) {
+  }
+  else if (reading == LOW && lastReading == HIGH)
+  {
     //    onTime = millis();
-    if (((millis() - onTime) > bounceTime) && hold != 1) {
+    if (((millis() - onTime) > bounceTime) && hold != 1)
+    {
       press();
     }
-    if (hold = 1) {
+    if (hold = 1)
+    {
       hold = 0;
     }
   }
@@ -225,7 +239,8 @@ void loop() {
   //__________________________________________________________________________________________
 
   // if the play button is pressed
-  if (!digitalRead(playButton)) {
+  if (!digitalRead(playButton))
+  {
     //  digitalWrite(pinLed, HIGH); // turn on LED
     Consumer.write(MEDIA_PLAY_PAUSE); // send HID command
     isDebugTruePrintToSerial("Play/Pause");
@@ -235,13 +250,15 @@ void loop() {
 
   // all the buttons follow the same pattern ...
 
-  if (!digitalRead(fwdButton)) {
+  if (!digitalRead(fwdButton))
+  {
     Consumer.write(MEDIA_NEXT);
     isDebugTruePrintToSerial("Next");
     delay(delayConst250);
   }
 
-  if (!digitalRead(backButton)) {
+  if (!digitalRead(backButton))
+  {
     Consumer.write(MEDIA_PREVIOUS);
     isDebugTruePrintToSerial("Back");
     delay(delayConst250);

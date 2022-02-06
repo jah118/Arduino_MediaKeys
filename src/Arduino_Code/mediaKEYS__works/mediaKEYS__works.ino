@@ -23,11 +23,27 @@
   https://www.instructables.com/id/USB-Volume-Control-and-Caps-Lock-LED-Simple-Cheap-/
 */
 
+
+//      TODO FOR V2 
+/*
+    use #include <Bounce2.h> for better douldbe press 
+    https://arduino.stackexchange.com/questions/69897/detecting-how-many-button-pressessingle-tap-double-tap-etc-with-two-simultane
+
+    ensure / add support for auto change beween linux and windows. 
+
+    V3 
+    change over to load key map file - maybejson 
+    read json AND  read it from pc program or some nice wayy that needs no reflash 
+    https://forum.arduino.cc/t/writing-to-flash-from-application-please-test-and-enjoy/320295
+
+*/
+
 //test singel or double press of keyy
 
 // include the HID library
 #include "HID-Project.h"
-#include "FastLED.h" //
+#include "FastLED.h" 
+#include "Bounce2.h"
 
 //look up hid projekt to see Languages  or see AlternateLanguageLayout.ino from hid project for example
 #define HID_CUSTOM_LAYOUT // set this flag to indicate that a custom layout is selected
@@ -54,14 +70,15 @@ int holdTime = 500;  //500
 unsigned int hold = 0;
 
 long lastSwitchTime = 0;
-long doubleTime = 230; // 150
+long doubleTime = 150; // 150 //230
 
-const int customButton = 7;
+
 int reading;
 
-const int backButton = 4;
-const int playButton = 5;
-const int fwdButton = 6;
+const int backButton = 4; // key 1
+const int playButton = 5; // key 2
+const int fwdButton = 6;  // key 3
+const int customButton = 7;
 
 const int delayConst75 = 75;
 const int delayConst250 = 250;
@@ -96,7 +113,7 @@ void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n)
     rgbState = 0;
     break;
   case 1:
-    isDebugTruePrintToSerial("reddd");
+    isDebugTruePrintToSerial("red");
     FastLED.clear();
     isDebugTruePrintToSerial("lastrgbState black");
     isDebugTruePrintToSerial(lastrgbState + "");
@@ -126,7 +143,7 @@ void press()
     {
     case 0:
       isDebugTruePrintToSerial("case 0");
-      isDebugTruePrintToSerial("lastrgbState : " + lastrgbState);
+      isDebugTruePrintToSerial("last rgbState: " + lastrgbState);
       isDebugTruePrintToSerial("rgbState black : " + rgbState);
       turnOnRGBByState(0, 0, 0, lastrgbState, 0);
       rgbState = 1;
@@ -135,13 +152,14 @@ void press()
       isDebugTruePrintToSerial("case 1");
       turnOnRGBByState(255, 0, 0, lastrgbState, 0);
       rgbState = 0;
-      isDebugTruePrintToSerial(" new val rgbState red");
+      isDebugTruePrintToSerial("new val rgbState red");
       isDebugTruePrintToSerial(rgbState + "");
       break;
     }
   }
   lastSwitchTime = millis();
 }
+
 
 void setup()
 {
@@ -152,6 +170,7 @@ void setup()
   pinMode(playButton, INPUT_PULLUP);
   pinMode(fwdButton, INPUT_PULLUP);
   pinMode(backButton, INPUT_PULLUP);
+
   //press decllare
   pinMode(customButton, INPUT_PULLUP);
 
