@@ -1,0 +1,6 @@
+{
+    "port": "COM5",
+    "board": "arduino:avr:micro",
+    "sketch": "src\\Arduino_Code\\mediaKEYS_3_keys_1_custom_key\\3_media_keys_1_custom_key.ino",
+    "programmer": "arduino:avrispmkii"
+}
