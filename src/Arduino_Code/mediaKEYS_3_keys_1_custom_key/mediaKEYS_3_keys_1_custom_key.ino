@@ -188,7 +188,6 @@ void press()
 
       Keyboard.write(KEY_F16);
       turnOnRGBByState(0, 0, 250, lastrgbState, 0);
-      //    Keyboard.println("You pressed the button ");
     }
     else if ((millis() - lastSwitchTime) > doubleTime)
     {
@@ -326,47 +325,6 @@ void loop()
       }
     }
   }
-  // TODO add this back again ..................vv....................
-  /*
-    // Button 4 pressed.
-    if (button4Debouncer.update())
-    {
-      if (button4Debouncer.fell()) // key is pressed down
-      {
-
-        // Check if button 3 and 4 pressed together  ///////////////////////////////////////////////////////////////// this need be re done
-        if (digitalRead(buttonPin3) == 0)
-        {
-          Keyboard.write(KEY_F16);
-          Button3.IncrementCounter(Button4);
-        }
-        else
-        {
-          reading = digitalRead(buttonPin4);
-          if (reading == HIGH && lastReading == LOW)
-          {
-            onTime = millis();
-          }
-          else if (reading == LOW && lastReading == HIGH)
-          {
-            //    onTime = millis();
-            if (((millis() - onTime) > bounceTime) && hold != 1)
-            {
-              press();
-            }
-            if (hold = 1)
-            {
-              hold = 0;
-            }
-          }
-
-          lastReading = reading;
-         // Keyboard.write(KEY_F19); // send HID command /&/ ///////  DELETE
-          isDebugTruePrintToSerial("Customkey");
-        }
-      }
-    }
-  */
 
   // Button 4 pressed.
   if (button4Debouncer.update())
