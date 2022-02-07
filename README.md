@@ -10,7 +10,8 @@ HID-Project by NicoHood Version 2.5.0 or above
 
 - can be found in Arduino Lirary Manager
 - or: https://github.com/NicoHood/HID
-  BOUNCE 2 Debouncing library for Arduino and Wiring by Thomas Ouellet Fredericks
+
+BOUNCE 2 Debouncing library for Arduino and Wiring by Thomas Ouellet Fredericks
 - can be found in Arduino Lirary Manager
 - or:  https://github.com/thomasfredericks/Bounce2
 
