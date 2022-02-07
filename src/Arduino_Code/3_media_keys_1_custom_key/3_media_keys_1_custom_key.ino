@@ -30,14 +30,18 @@
 
     ensure / add support for auto change beween linux and windows.
 
-    V3
+  //        TODO FOR V3
     change over to load key map file - maybejson
     read json AND  read it from pc program or some nice wayy that needs no reflash
     https://forum.arduino.cc/t/writing-to-flash-from-application-please-test-and-enjoy/320295
 
 */
+/*'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Notes / bugs  *''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+  // test singel or double press of keyy
+  // if arduino is on for about 50 days mills() will overflow. The var's 'ontime' and 'lastSwitchTime'
+      -- source https://www.arduino.cc/reference/en/language/functions/time/millis/
 
-// test singel or double press of keyy
+  ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''*''''''''*''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''*/
 
 // include the HID library
 #include "HID-Project.h"
@@ -61,15 +65,15 @@ CRGB leds[NUM_LEDS];
 int rgbState = 1;
 int lastrgbState = 0;
 
-// press var's for determening a press
+// press var's for determening a press or double press
 unsigned long onTime;
 int lastReading = LOW;
-int bounceTime = 35; // 50
-int holdTime = 500;  // 500
+int bounceTime = 35;      // 50
+int holdTime = 500;       // 500
 unsigned int hold = 0;
 
-long lastSwitchTime = 0;
-long doubleTime = 230; // 150 //230
+unsigned long lastSwitchTime = 0;
+long doubleTime = 230;    // 150 //230
 
 int reading;
 
@@ -79,7 +83,6 @@ const int buttonPin3 = 6; // key 3 fwdButton
 const int buttonPin4 = 7; // key 4 customButton F16/F19
 
 const int delayConst75 = 75;
-// const int delayConst250 = 250;
 
 // Determs if Serial.print is enabled
 const bool debugState = true;
@@ -96,54 +99,54 @@ void isDebugTruePrintToSerial(String temp)
 class Button
 {
 
-private:
-  byte m_buttonPin;
-  byte m_counter = 0;
-  unsigned long m_buttonPressTimeout;
-  unsigned long m_previousMillis;
+  private:
+    byte m_buttonPin;
+    byte m_counter = 0;
+    unsigned long m_buttonPressTimeout;
+    unsigned long m_previousMillis;
 
-public:
-  Button(byte buttonPin) : m_buttonPin(buttonPin),
-                           m_counter(0),
-                           m_buttonPressTimeout(750), // Button press timeout in ms.
-                           m_previousMillis(0)
-  {
-  }
-
-  void Update()
-  {
-    if (m_counter > 0 && millis() - m_previousMillis >= m_buttonPressTimeout)
+  public:
+    Button(byte buttonPin) : m_buttonPin(buttonPin),
+      m_counter(0),
+      m_buttonPressTimeout(750), // Button press timeout in ms.
+      m_previousMillis(0)
     {
-      isDebugTruePrintToSerial("Count from Update() just before it's reset to 0 = ");
-      Serial.println(GetCounter());
-      m_counter = 0;
     }
-  }
 
-  void IncrementCounter()
-  {
-    m_counter++;
-    if (m_counter > 4)
+    void Update()
     {
-      m_counter = 4;
+      if (m_counter > 0 && millis() - m_previousMillis >= m_buttonPressTimeout)
+      {
+        isDebugTruePrintToSerial("Count from Update() just before it's reset to 0 = ");
+        Serial.println(GetCounter());
+        m_counter = 0;
+      }
     }
-    if (m_counter == 1)
+
+    void IncrementCounter()
     {
-      m_previousMillis = millis();
+      m_counter++;
+      if (m_counter > 4)
+      {
+        m_counter = 4;
+      }
+      if (m_counter == 1)
+      {
+        m_previousMillis = millis();
+      }
     }
-  }
 
-  friend void IncrementCounter(Button &);
+    friend void IncrementCounter(Button &);
 
-  void IncrementCounter(Button &)
-  {
-    IncrementCounter();
-  }
+    void IncrementCounter(Button &)
+    {
+      IncrementCounter();
+    }
 
-  byte GetCounter()
-  {
-    return m_counter;
-  }
+    byte GetCounter()
+    {
+      return m_counter;
+    }
 };
 
 // n = led
@@ -151,50 +154,48 @@ void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n)
 {
   switch (state)
   {
-  case 0:
-    FastLED.clear();
-    leds[n] = CRGB(cRed, cGreen, cBlue);
-    for (int i = 0; i <= NUM_LEDS - 1; i++)
-    {
-      leds[n + i] = CRGB(cRed, cGreen, cBlue);
-    }
+    case 0:
+      FastLED.clear();
+      leds[n] = CRGB(cRed, cGreen, cBlue);
+      for (int i = 0; i <= NUM_LEDS - 1; i++)
+      {
+        leds[n + i] = CRGB(cRed, cGreen, cBlue);
+      }
 
-    isDebugTruePrintToSerial(state + "");
-    isDebugTruePrintToSerial(lastrgbState + "");
-    FastLED.show();
-    lastrgbState = 0;
-    rgbState = 0;
-    break;
-  case 1:
-    isDebugTruePrintToSerial("red");
-    FastLED.clear();
-    isDebugTruePrintToSerial("lastrgbState black");
-    isDebugTruePrintToSerial(lastrgbState + "");
-    leds[2] = CRGB::Black;
-    FastLED.show();
-    lastrgbState = 0;
-    rgbState = 0;
-    break;
+      isDebugTruePrintToSerial(state + "");
+      isDebugTruePrintToSerial(lastrgbState + "");
+      FastLED.show();
+      lastrgbState = 0;
+      rgbState = 0;
+      break;
+    case 1:
+      isDebugTruePrintToSerial("red");
+      FastLED.clear();
+      isDebugTruePrintToSerial("lastrgbState black");
+      isDebugTruePrintToSerial(lastrgbState + "");
+      leds[2] = CRGB::Black;
+      FastLED.show();
+      lastrgbState = 0;
+      rgbState = 0;
+      break;
   }
 }
 // TODO optimise this
 void press()
 {
+  if ((millis() - lastSwitchTime) < doubleTime)
   {
+    isDebugTruePrintToSerial("double press");
 
-    if ((millis() - lastSwitchTime) < doubleTime)
+    Keyboard.write(KEY_F16);
+    turnOnRGBByState(0, 0, 250, lastrgbState, 0);
+  }
+  else if ((millis() - lastSwitchTime) > doubleTime)
+  {
+    isDebugTruePrintToSerial("single press");
+    Keyboard.write(KEY_F19);
+    switch (rgbState)
     {
-      isDebugTruePrintToSerial("double press");
-
-      Keyboard.write(KEY_F16);
-      turnOnRGBByState(0, 0, 250, lastrgbState, 0);
-    }
-    else if ((millis() - lastSwitchTime) > doubleTime)
-    {
-      isDebugTruePrintToSerial("single press");
-      Keyboard.write(KEY_F19);
-      switch (rgbState)
-      {
       case 0:
         isDebugTruePrintToSerial("case 0");
         isDebugTruePrintToSerial("last rgbState: " + lastrgbState);
@@ -209,9 +210,9 @@ void press()
         isDebugTruePrintToSerial("new val rgbState red");
         isDebugTruePrintToSerial(rgbState + "");
         break;
-      }
     }
   }
+
   lastSwitchTime = millis();
 }
 
@@ -229,7 +230,7 @@ void setup()
   Serial.begin(115200);
   delay(20);
 
-  // define the pin mode for each pin used
+  // Define the pin mode for each pin used
   pinMode(buttonPin1, INPUT_PULLUP);
   pinMode(buttonPin2, INPUT_PULLUP);
   pinMode(buttonPin3, INPUT_PULLUP);
@@ -250,11 +251,11 @@ void setup()
   Keyboard.begin();
   Consumer.begin();
 
-  delay(3000); // 3 second delay for recovery
+  delay(1500); // 1.5 second delay for recovery
   // tell FastLED about the LED strip configuration
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS)
-      .setCorrection(TypicalLEDStrip)
-      .setDither(BRIGHTNESS < 255);
+  .setCorrection(TypicalLEDStrip)
+  .setDither(BRIGHTNESS < 255);
 
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
@@ -329,15 +330,15 @@ void loop()
   // Button 4 pressed.
   if (button4Debouncer.update())
   {
-    //////(  OLD WAY Works but not as stabel as hoped )   //////
+    //////  (  OLD WAY Works but not as stabel as hoped )   //////
     // single or double  pressed
     //-----------------------------------------------------------------------------------------
     reading = digitalRead(buttonPin4);
-    if (reading == HIGH && lastReading == LOW)
+    if (reading == HIGH && lastReading == LOW) // This is when the button is not pressed then the ontime is
     {
       onTime = millis();
     }
-    else if (reading == LOW && lastReading == HIGH)
+    else if (reading == LOW && lastReading == HIGH) // This is when the button is pressed
     {
       //    onTime = millis();
       if (((millis() - onTime) > bounceTime) && hold != 1)
