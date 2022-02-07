@@ -235,11 +235,13 @@ void setup()
   pinMode(buttonPin2, INPUT_PULLUP);
   pinMode(buttonPin3, INPUT_PULLUP);
   pinMode(buttonPin4, INPUT_PULLUP);
+  
   // BUTTON Setup for Bounce2
   button1Debouncer.attach(buttonPin1);
   button2Debouncer.attach(buttonPin2);
   button3Debouncer.attach(buttonPin3);
   button4Debouncer.attach(buttonPin4);
+  
   // DEBOUNCE INTERVAL IN MILLISECONDS
   button1Debouncer.interval(25);
   button2Debouncer.interval(25);
@@ -247,7 +249,6 @@ void setup()
   button4Debouncer.interval(25);
 
   // Begin HID connection
-  // BootKeyboard.begin(); //old way useful for bios and or logout
   Keyboard.begin();
   Consumer.begin();
 
@@ -330,7 +331,7 @@ void loop()
   // Button 4 pressed.
   if (button4Debouncer.update())
   {
-    //////  (  OLD WAY Works but not as stabel as hoped )   //////
+    //////  (  OLD WAY Works but not as stabel as hoped ) the un stable ness comes from debouncetime in press   //////
     // single or double  pressed
     //-----------------------------------------------------------------------------------------
     reading = digitalRead(buttonPin4);
