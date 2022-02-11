@@ -23,18 +23,27 @@
   https://www.instructables.com/id/USB-Volume-Control-and-Caps-Lock-LED-Simple-Cheap-/
 */
 
-//      TODO FOR V2
+//      TODO FOR V2 - done 
 /*
     use #include <Bounce2.h> for better douldbe press
     https://arduino.stackexchange.com/questions/69897/detecting-how-many-button-pressessingle-tap-double-tap-etc-with-two-simultane
 
     ensure / add support for auto change beween linux and windows.
 
-  //        TODO FOR V3
+  //        TODO FOR V2.1
     change over to load key map file - maybejson
     read json AND  read it from pc program or some nice wayy that needs no reflash
     https://forum.arduino.cc/t/writing-to-flash-from-application-please-test-and-enjoy/320295
-
+  // TODO goals for v3.0.0
+    add serial support between arduione and esp to send keypress or recives keypress
+      - reason this is to add support for esp or raspberry zero with screen that shows media status. 
+      - if zero is used then a webpage can be used. show and pull data from there. do browser in terminal to save resources, and make it host is own webpages that is displayed 
+      - if esp is used thne look in to building ui that where some part is static and and only progress bar moves https://forum.arduino.cc/t/tft-touch-reaching-high-refresh-rate-cost-effectively/595823/6
+        and rest of sreen updates only on new song changed (this not for first version, first version shows the name of the song played  )
+        https://www.youtube.com/watch?v=rq5yPJbX_uk
+        https://www.esp8266.com/viewtopic.php?f=32&t=16366
+        
+      
 */
 /*'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Notes / bugs  *''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   // test singel or double press of keyy
