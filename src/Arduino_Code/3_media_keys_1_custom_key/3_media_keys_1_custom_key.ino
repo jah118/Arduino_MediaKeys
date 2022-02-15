@@ -2,7 +2,7 @@
   Jonas
 
   Arduino Media Keys
-  Version 0.8
+  Version V0.8.1
   06/02/2022
 
   Dependencies:
@@ -32,8 +32,13 @@
 
   //        TODO FOR V2.1
     change over to load key map file - maybejson
-    read json AND  read it from pc program or some nice wayy that needs no reflash
+    read json AND  read it from pc program or some nice wayy that needs no reflash : 
     https://forum.arduino.cc/t/writing-to-flash-from-application-please-test-and-enjoy/320295
+    https://arduinoplusplus.wordpress.com/2019/04/02/persisting-application-parameters-in-eeprom/
+    https://arduinojson.org/v6/how-to/store-a-json-document-in-eeprom/
+    https://arduinojson.org/
+    https://arduinojson.org/v6/how-to/reduce-memory-usage/
+
   // TODO goals for v3.0.0
     add serial support between arduione and esp to send keypress or recives keypress
       - reason this is to add support for esp or raspberry zero with screen that shows media status. 
@@ -55,13 +60,17 @@
 // include the HID library
 #include "HID-Project.h"
 #include "FastLED.h"
-#include "Bounce2.h"
+
+//--------- Internal references ------------
+// (this needs to be below all structs etc..) this may needed to be loaded after struct 
+#include "configLoad.h"
+#include "Button.h"
 
 // look up hid projekt to see Languages  or see AlternateLanguageLayout.ino from hid project for example
 #define HID_CUSTOM_LAYOUT // set this flag to indicate that a custom layout is selected
 #define LAYOUT_DANISH     // set this flag after the above flag to indicate the custom input method is DANISH
 
-// rgb
+//------------------------------ rgb ------------------------------
 #define DATA_PIN 9
 //#define CLK_PIN 4
 #define LED_TYPE WS2811
@@ -74,6 +83,7 @@ CRGB leds[NUM_LEDS];
 int rgbState = 1;
 int lastrgbState = 0;
 
+// ------------------------------ Buttons press vars ------------------------------
 // press var's for determening a press or double press
 unsigned long onTime;
 int lastReading = LOW;
@@ -93,6 +103,7 @@ const int buttonPin4 = 7; // key 4 customButton F16/F19
 
 const int delayConst75 = 75;
 
+// ------------------------------ DEBUG ------------------------------
 // Determs if Serial.print is enabled
 const bool debugState = true;
 
@@ -104,61 +115,10 @@ void isDebugTruePrintToSerial(String temp)
   }
 }
 
-// This could be move to its own lib / file  to keep it clean
-class Button
-{
 
-  private:
-    byte m_buttonPin;
-    byte m_counter = 0;
-    unsigned long m_buttonPressTimeout;
-    unsigned long m_previousMillis;
-
-  public:
-    Button(byte buttonPin) : m_buttonPin(buttonPin),
-      m_counter(0),
-      m_buttonPressTimeout(750), // Button press timeout in ms.
-      m_previousMillis(0)
-    {
-    }
-
-    void Update()
-    {
-      if (m_counter > 0 && millis() - m_previousMillis >= m_buttonPressTimeout)
-      {
-        isDebugTruePrintToSerial("Count from Update() just before it's reset to 0 = ");
-        Serial.println(GetCounter());
-        m_counter = 0;
-      }
-    }
-
-    void IncrementCounter()
-    {
-      m_counter++;
-      if (m_counter > 4)
-      {
-        m_counter = 4;
-      }
-      if (m_counter == 1)
-      {
-        m_previousMillis = millis();
-      }
-    }
-
-    friend void IncrementCounter(Button &);
-
-    void IncrementCounter(Button &)
-    {
-      IncrementCounter();
-    }
-
-    byte GetCounter()
-    {
-      return m_counter;
-    }
-};
-
-// n = led
+// TODO
+// n = how many leds need be turned on, is used as a array this enables to not turn all the leds. 
+// state = used for turning the leds on and of as a toggle 
 void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n)
 {
   switch (state)
@@ -177,18 +137,18 @@ void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n)
       lastrgbState = 0;
       rgbState = 0;
       break;
-    case 1:
-      isDebugTruePrintToSerial("red");
+    case 1:  // is used for turning it off 
       FastLED.clear();
       isDebugTruePrintToSerial("lastrgbState black");
       isDebugTruePrintToSerial(lastrgbState + "");
-      leds[2] = CRGB::Black;
+      leds[NUM_LEDS] = CRGB::Black;
       FastLED.show();
       lastrgbState = 0;
       rgbState = 0;
       break;
   }
 }
+
 // TODO optimise this
 void press()
 {
@@ -197,7 +157,8 @@ void press()
     isDebugTruePrintToSerial("double press");
 
     Keyboard.write(KEY_F16);
-    turnOnRGBByState(0, 0, 250, lastrgbState, 0);
+    // goes blue and stay blue to show state if need like to show you are muted or deafed on discord 
+    turnOnRGBByState(0, 0, 250, lastrgbState, 0); 
   }
   else if ((millis() - lastSwitchTime) > doubleTime)
   {
@@ -205,7 +166,7 @@ void press()
     Keyboard.write(KEY_F19);
     switch (rgbState)
     {
-      case 0:
+      case 0:   // when case is 0 the led was on 
         isDebugTruePrintToSerial("case 0");
         isDebugTruePrintToSerial("last rgbState: " + lastrgbState);
         isDebugTruePrintToSerial("rgbState black : " + rgbState);
@@ -221,7 +182,6 @@ void press()
         break;
     }
   }
-
   lastSwitchTime = millis();
 }
 
@@ -233,6 +193,8 @@ Button Button1(buttonPin1);
 Button Button2(buttonPin2);
 Button Button3(buttonPin3);
 Button Button4(buttonPin4);
+
+
 
 void setup()
 {
@@ -262,6 +224,7 @@ void setup()
   Consumer.begin();
 
   delay(1500); // 1.5 second delay for recovery
+
   // tell FastLED about the LED strip configuration
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS)
   .setCorrection(TypicalLEDStrip)
@@ -269,7 +232,6 @@ void setup()
 
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
-
   for (int dot = 0; dot < NUM_LEDS - 1; dot++)
   {
     FastLED.show();
