@@ -1,0 +1,22 @@
+{
+  "button1": {
+    "pin": 4,
+    "key": "",
+    "doublepress": false
+  },
+  "button2": {
+    "pin": 5,
+    "key": "",
+    "doublepress": false
+  },
+  "button3": {
+    "pin": 6,
+    "key": "",
+    "doublepress": false
+  },
+  "button4": {
+    "pin": 7,
+    "key": "",
+    "doublepress": true
+  }
+}
