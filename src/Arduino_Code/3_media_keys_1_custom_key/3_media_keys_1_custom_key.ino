@@ -23,7 +23,7 @@
   https://www.instructables.com/id/USB-Volume-Control-and-Caps-Lock-LED-Simple-Cheap-/
 */
 
-//      TODO FOR V2 - done 
+//      TODO FOR V2 - done
 /*
     use #include <Bounce2.h> for better douldbe press
     https://arduino.stackexchange.com/questions/69897/detecting-how-many-button-pressessingle-tap-double-tap-etc-with-two-simultane
@@ -32,7 +32,7 @@
 
   //        TODO FOR V2.1
     change over to load key map file - maybejson
-    read json AND  read it from pc program or some nice wayy that needs no reflash : 
+    read json AND  read it from pc program or some nice wayy that needs no reflash :
     https://forum.arduino.cc/t/writing-to-flash-from-application-please-test-and-enjoy/320295
     https://arduinoplusplus.wordpress.com/2019/04/02/persisting-application-parameters-in-eeprom/
     https://arduinojson.org/v6/how-to/store-a-json-document-in-eeprom/
@@ -41,14 +41,14 @@
 
   // TODO goals for v3.0.0
     add serial support between arduione and esp to send keypress or recives keypress
-      - reason this is to add support for esp or raspberry zero with screen that shows media status. 
-      - if zero is used then a webpage can be used. show and pull data from there. do browser in terminal to save resources, and make it host is own webpages that is displayed 
+      - reason this is to add support for esp or raspberry zero with screen that shows media status.
+      - if zero is used then a webpage can be used. show and pull data from there. do browser in terminal to save resources, and make it host is own webpages that is displayed
       - if esp is used thne look in to building ui that where some part is static and and only progress bar moves https://forum.arduino.cc/t/tft-touch-reaching-high-refresh-rate-cost-effectively/595823/6
         and rest of sreen updates only on new song changed (this not for first version, first version shows the name of the song played  )
         https://www.youtube.com/watch?v=rq5yPJbX_uk
         https://www.esp8266.com/viewtopic.php?f=32&t=16366
-        
-      
+
+
 */
 /*'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Notes / bugs  *''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   // test singel or double press of keyy
@@ -61,10 +61,7 @@
 #include "HID-Project.h"
 #include "FastLED.h"
 
-//--------- Internal references ------------
-// (this needs to be below all structs etc..) this may needed to be loaded after struct 
-#include "configLoad.h"
-#include "Button.h"
+// TODO add defin things to struct and load from json
 
 // look up hid projekt to see Languages  or see AlternateLanguageLayout.ino from hid project for example
 #define HID_CUSTOM_LAYOUT // set this flag to indicate that a custom layout is selected
@@ -78,7 +75,7 @@
 #define NUM_LEDS 8
 #define BRIGHTNESS 32
 
-CRGB leds[NUM_LEDS];
+CRGB leds[NUM_LEDS]; // TODO maybe move beacause of loading order of data and info from config
 
 int rgbState = 1;
 int lastrgbState = 0;
@@ -87,12 +84,12 @@ int lastrgbState = 0;
 // press var's for determening a press or double press
 unsigned long onTime;
 int lastReading = LOW;
-int bounceTime = 35;      // 50
-int holdTime = 500;       // 500
+int bounceTime = 35; // 50
+int holdTime = 500;  // 500
 unsigned int hold = 0;
 
 unsigned long lastSwitchTime = 0;
-long doubleTime = 230;    // 150 //230
+long doubleTime = 230; // 150 //230   // time for captureing a double press
 
 int reading;
 
@@ -100,8 +97,6 @@ const int buttonPin1 = 4; // key 1 backButton
 const int buttonPin2 = 5; // key 2 playButton
 const int buttonPin3 = 6; // key 3 fwdButton
 const int buttonPin4 = 7; // key 4 customButton F16/F19
-
-const int delayConst75 = 75;
 
 // ------------------------------ DEBUG ------------------------------
 // Determs if Serial.print is enabled
@@ -115,37 +110,36 @@ void isDebugTruePrintToSerial(String temp)
   }
 }
 
-
 // TODO
-// n = how many leds need be turned on, is used as a array this enables to not turn all the leds. 
-// state = used for turning the leds on and of as a toggle 
+// n = how many leds need be turned on, is used as a array this enables to not turn all the leds.
+// state = used for turning the leds on and of as a toggle
 void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n)
 {
   switch (state)
   {
-    case 0:
-      FastLED.clear();
-      leds[n] = CRGB(cRed, cGreen, cBlue);
-      for (int i = 0; i <= NUM_LEDS - 1; i++)
-      {
-        leds[n + i] = CRGB(cRed, cGreen, cBlue);
-      }
+  case 0:
+    FastLED.clear();
+    leds[n] = CRGB(cRed, cGreen, cBlue);
+    for (int i = 0; i <= NUM_LEDS - 1; i++)
+    {
+      leds[n + i] = CRGB(cRed, cGreen, cBlue);
+    }
 
-      isDebugTruePrintToSerial(state + "");
-      isDebugTruePrintToSerial(lastrgbState + "");
-      FastLED.show();
-      lastrgbState = 0;
-      rgbState = 0;
-      break;
-    case 1:  // is used for turning it off 
-      FastLED.clear();
-      isDebugTruePrintToSerial("lastrgbState black");
-      isDebugTruePrintToSerial(lastrgbState + "");
-      leds[NUM_LEDS] = CRGB::Black;
-      FastLED.show();
-      lastrgbState = 0;
-      rgbState = 0;
-      break;
+    isDebugTruePrintToSerial(state + "");
+    isDebugTruePrintToSerial(lastrgbState + "");
+    FastLED.show();
+    lastrgbState = 0;
+    rgbState = 0;
+    break;
+  case 1: // is used for turning it off
+    FastLED.clear();
+    isDebugTruePrintToSerial("lastrgbState black");
+    isDebugTruePrintToSerial(lastrgbState + "");
+    leds[NUM_LEDS] = CRGB::Black;
+    FastLED.show();
+    lastrgbState = 0;
+    rgbState = 0;
+    break;
   }
 }
 
@@ -157,33 +151,64 @@ void press()
     isDebugTruePrintToSerial("double press");
 
     Keyboard.write(KEY_F16);
-    // goes blue and stay blue to show state if need like to show you are muted or deafed on discord 
-    turnOnRGBByState(0, 0, 250, lastrgbState, 0); 
+    // goes blue and stay blue to show state if need like to show you are muted or deafed on discord
+    turnOnRGBByState(0, 0, 250, lastrgbState, 0);
   }
   else if ((millis() - lastSwitchTime) > doubleTime)
   {
     isDebugTruePrintToSerial("single press");
     Keyboard.write(KEY_F19);
-    switch (rgbState)
+    switch (rgbState) // when case is 0 the led was on
     {
-      case 0:   // when case is 0 the led was on 
-        isDebugTruePrintToSerial("case 0");
-        isDebugTruePrintToSerial("last rgbState: " + lastrgbState);
-        isDebugTruePrintToSerial("rgbState black : " + rgbState);
-        turnOnRGBByState(0, 0, 0, lastrgbState, 0);
-        rgbState = 1;
-        break;
-      case 1:
-        isDebugTruePrintToSerial("case 1");
-        turnOnRGBByState(255, 0, 0, lastrgbState, 0);
-        rgbState = 0;
-        isDebugTruePrintToSerial("new val rgbState red");
-        isDebugTruePrintToSerial(rgbState + "");
-        break;
+    case 0:
+      isDebugTruePrintToSerial("rgbState black : " + rgbState);
+      turnOnRGBByState(0, 0, 0, lastrgbState, 0);
+      rgbState = 1;
+      break;
+    case 1:
+      isDebugTruePrintToSerial("case 1");
+      turnOnRGBByState(255, 0, 0, lastrgbState, 0);
+      rgbState = 0;
+      isDebugTruePrintToSerial("new val rgbState red");
+      isDebugTruePrintToSerial(rgbState + "");
+      break;
     }
   }
   lastSwitchTime = millis();
 }
+
+// Struct to hold the general config like colours.
+struct Config
+{
+  char layout;
+  uint16_t datapin;
+  char ledtype;
+  char colororder;
+  uint16_t nleds;
+  uint16_t brightness;
+  uint8_t bounceTime;
+  uint8_t holdTime;
+  uint8_t doubleTime;
+  uint8_t attempts;
+  uint16_t attemptdelay;
+};
+
+struct Wificonfig
+{
+  char ssid[64];
+  char password[64];
+  char wifimode[9];
+  char hostname[64];
+  uint8_t attempts;
+  uint16_t attemptdelay;
+};
+
+//--------- Internal references ------------
+// (this needs to be below all structs etc..) this may needed to be loaded after struct
+#include "configLoad.h"
+#include "Button.h"
+
+// -------------- Start Button  ----------------------
 
 Bounce button1Debouncer = Bounce();
 Bounce button2Debouncer = Bounce();
@@ -194,7 +219,33 @@ Button Button2(buttonPin2);
 Button Button3(buttonPin3);
 Button Button4(buttonPin4);
 
+// -------------- Start filesystem ----------------------
 
+if (!FILESYSTEM.begin())
+{
+  Serial.println("[ERROR]: SPIFFS initialisation failed!");
+  drawErrorMessage("Failed to init SPIFFS! Did you upload the data folder?");
+  while (1)
+    yield(); // We stop here
+}
+Serial.println("[INFO]: SPIFFS initialised.");
+
+// Check for free space
+
+Serial.print("[INFO]: Free Space: ");
+Serial.println(SPIFFS.totalBytes() - SPIFFS.usedBytes());
+
+//------------------ Load Config ----------------------------------------------
+
+Serial.println("[INFO]: Loading Config");
+if (!configLoad())
+{
+  Serial.println("[WARNING]: Failed to load config!");
+}
+else
+{
+  Serial.println("[INFO]: Config Loaded");
+}
 
 void setup()
 {
@@ -206,13 +257,13 @@ void setup()
   pinMode(buttonPin2, INPUT_PULLUP);
   pinMode(buttonPin3, INPUT_PULLUP);
   pinMode(buttonPin4, INPUT_PULLUP);
-  
+
   // BUTTON Setup for Bounce2
   button1Debouncer.attach(buttonPin1);
   button2Debouncer.attach(buttonPin2);
   button3Debouncer.attach(buttonPin3);
   button4Debouncer.attach(buttonPin4);
-  
+
   // DEBOUNCE INTERVAL IN MILLISECONDS
   button1Debouncer.interval(25);
   button2Debouncer.interval(25);
@@ -227,8 +278,8 @@ void setup()
 
   // tell FastLED about the LED strip configuration
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS)
-  .setCorrection(TypicalLEDStrip)
-  .setDither(BRIGHTNESS < 255);
+      .setCorrection(TypicalLEDStrip)
+      .setDither(BRIGHTNESS < 255);
 
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
