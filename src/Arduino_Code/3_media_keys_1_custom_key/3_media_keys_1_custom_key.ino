@@ -21,6 +21,8 @@
   http://www.freebsddiary.org/APC/usb_hid_usages.php
   - list of hid codes for further use or differt use case
   https://www.instructables.com/id/USB-Volume-Control-and-Caps-Lock-LED-Simple-Cheap-/
+
+  https://docs.arduino.cc/hacking/software/LibraryTutorial
 */
 
 //      TODO FOR V2 - done
@@ -193,27 +195,18 @@ struct Config
   uint16_t attemptdelay;
 };
 
-struct Wificonfig
-{
-  char ssid[64];
-  char password[64];
-  char wifimode[9];
-  char hostname[64];
-  uint8_t attempts;
-  uint16_t attemptdelay;
-};
-
 //--------- Internal references ------------
 // (this needs to be below all structs etc..) this may needed to be loaded after struct
 #include "configLoad.h"
 #include "Button.h"
 
 // -------------- Start Button  ----------------------
-
+// Bounce2.h lib setup
 Bounce button1Debouncer = Bounce();
 Bounce button2Debouncer = Bounce();
 Bounce button3Debouncer = Bounce();
 Bounce button4Debouncer = Bounce();
+// Button.h lib setup
 Button Button1(buttonPin1);
 Button Button2(buttonPin2);
 Button Button3(buttonPin3);
@@ -221,31 +214,31 @@ Button Button4(buttonPin4);
 
 // -------------- Start filesystem ----------------------
 
-if (!FILESYSTEM.begin())
-{
-  Serial.println("[ERROR]: SPIFFS initialisation failed!");
-  drawErrorMessage("Failed to init SPIFFS! Did you upload the data folder?");
-  while (1)
-    yield(); // We stop here
-}
-Serial.println("[INFO]: SPIFFS initialised.");
-
-// Check for free space
-
-Serial.print("[INFO]: Free Space: ");
-Serial.println(SPIFFS.totalBytes() - SPIFFS.usedBytes());
+//if (!FILESYSTEM.begin())
+//{
+//  Serial.println("[ERROR]: SPIFFS initialisation failed!");
+//  drawErrorMessage("Failed to init SPIFFS! Did you upload the data folder?");
+//  while (1)
+//    yield(); // We stop here
+//}
+//Serial.println("[INFO]: SPIFFS initialised.");
+//
+//// Check for free space
+//
+//Serial.print("[INFO]: Free Space: ");
+//Serial.println(SPIFFS.totalBytes() - SPIFFS.usedBytes());
 
 //------------------ Load Config ----------------------------------------------
 
-Serial.println("[INFO]: Loading Config");
-if (!configLoad())
-{
-  Serial.println("[WARNING]: Failed to load config!");
-}
-else
-{
-  Serial.println("[INFO]: Config Loaded");
-}
+//Serial.println("[INFO]: Loading Config");
+//if (!configLoad())
+//{
+//  Serial.println("[WARNING]: Failed to load config!");
+//}
+//else
+//{
+//  Serial.println("[INFO]: Config Loaded");
+//}
 
 void setup()
 {

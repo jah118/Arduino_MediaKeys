@@ -1,5 +1,9 @@
-#include "Bounce2.h"
+#ifndef Buttom_h
+#define Buttom_h
+
 #include <Arduino.h>
+#include "Bounce2.h"
+
 
 class Button
 {
@@ -25,3 +29,4 @@ class Button
     void IncrementCounter(Button &);
     byte GetCounter();
 };
+#endif
