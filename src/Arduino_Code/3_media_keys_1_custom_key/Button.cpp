@@ -25,7 +25,7 @@ void Button::IncrementCounter()
   }
 }
 
-//friend void void Button::IncrementCounter(Button &);
+// friend void void Button::IncrementCounter(Button &);
 
 void Button::IncrementCounter(Button &)
 {

@@ -70,44 +70,44 @@
  };
  */
 
-//bool loadConfig()
+// bool loadConfig()
 //{
-//  if (!FILESYSTEM.exists("/config/config.json"))
-//  {
-//    Serial.println("[WARNING]: Config file not found!");
-//    return false;
-//  }
-//  File configfile = FILESYSTEM.open("/config/config.json");
+//   if (!FILESYSTEM.exists("/config/config.json"))
+//   {
+//     Serial.println("[WARNING]: Config file not found!");
+//     return false;
+//   }
+//   File configfile = FILESYSTEM.open("/config/config.json");
 //
-//  DynamicJsonDocument doc(256);
+//   DynamicJsonDocument doc(256);
 //
-//  DeserializationError error = deserializeJson(doc, configfile);
+//   DeserializationError error = deserializeJson(doc, configfile);
 //
-//  strlcpy(config.layout, doc["layout"] | "FAILED", sizeof(config.layout));
-//  strlcpy(config.datapin, doc["datapin"] | "FAILED", sizeof(config.datapin));
-//  strlcpy(config.ledtype, doc["ledtype"] | "FAILED", sizeof(config.ledtype));
-//  strlcpy(config.colororder, doc["colororder"] | "freetouchdeck", sizeof(config.colororder));
-//  strlcpy(config.nleds, doc["nleds"] | "FAILED", sizeof(config.nleds)); // change from doc to int maybe
-//  strlcpy(config.brightness, doc["brightness"] | "FAILED", sizeof(config.brightness));
+//   strlcpy(config.layout, doc["layout"] | "FAILED", sizeof(config.layout));
+//   strlcpy(config.datapin, doc["datapin"] | "FAILED", sizeof(config.datapin));
+//   strlcpy(config.ledtype, doc["ledtype"] | "FAILED", sizeof(config.ledtype));
+//   strlcpy(config.colororder, doc["colororder"] | "freetouchdeck", sizeof(config.colororder));
+//   strlcpy(config.nleds, doc["nleds"] | "FAILED", sizeof(config.nleds)); // change from doc to int maybe
+//   strlcpy(config.brightness, doc["brightness"] | "FAILED", sizeof(config.brightness));
 //
-//  strlcpy(config.wifimode, doc["bounceTime"] | "FAILED", sizeof(wificonfig.wifimode));
-//  strlcpy(config.hostname, doc["holdTime"] | "freetouchdeck", sizeof(wificonfig.hostname));
-//  strlcpy(config.wifimode, doc["doubleTime"] | "FAILED", sizeof(wificonfig.wifimode));
+//   strlcpy(config.wifimode, doc["bounceTime"] | "FAILED", sizeof(wificonfig.wifimode));
+//   strlcpy(config.hostname, doc["holdTime"] | "freetouchdeck", sizeof(wificonfig.hostname));
+//   strlcpy(config.wifimode, doc["doubleTime"] | "FAILED", sizeof(wificonfig.wifimode));
 //
-//  uint8_t attempts = doc["attempts"] | 10;
-//  wificonfig.attempts = attempts;
+//   uint8_t attempts = doc["attempts"] | 10;
+//   wificonfig.attempts = attempts;
 //
-//  uint16_t attemptdelay = doc["attemptdelay"] | 500;
-//  wificonfig.attemptdelay = attemptdelay;
+//   uint16_t attemptdelay = doc["attemptdelay"] | 500;
+//   wificonfig.attemptdelay = attemptdelay;
 //
-//  configfile.close();
+//   configfile.close();
 //
-//  if (error)
-//  {
-//    Serial.println("[ERROR]: deserializeJson() error");
-//    Serial.println(error.c_str());
-//    return false;
-//  }
+//   if (error)
+//   {
+//     Serial.println("[ERROR]: deserializeJson() error");
+//     Serial.println(error.c_str());
+//     return false;
+//   }
 //
-//  return true;
-//}
+//   return true;
+// }

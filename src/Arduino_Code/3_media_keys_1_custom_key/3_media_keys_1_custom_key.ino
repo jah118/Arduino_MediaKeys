@@ -214,31 +214,31 @@ Button Button4(buttonPin4);
 
 // -------------- Start filesystem ----------------------
 
-//if (!FILESYSTEM.begin())
+// if (!FILESYSTEM.begin())
 //{
-//  Serial.println("[ERROR]: SPIFFS initialisation failed!");
-//  drawErrorMessage("Failed to init SPIFFS! Did you upload the data folder?");
-//  while (1)
-//    yield(); // We stop here
-//}
-//Serial.println("[INFO]: SPIFFS initialised.");
+//   Serial.println("[ERROR]: SPIFFS initialisation failed!");
+//   drawErrorMessage("Failed to init SPIFFS! Did you upload the data folder?");
+//   while (1)
+//     yield(); // We stop here
+// }
+// Serial.println("[INFO]: SPIFFS initialised.");
 //
 //// Check for free space
 //
-//Serial.print("[INFO]: Free Space: ");
-//Serial.println(SPIFFS.totalBytes() - SPIFFS.usedBytes());
+// Serial.print("[INFO]: Free Space: ");
+// Serial.println(SPIFFS.totalBytes() - SPIFFS.usedBytes());
 
 //------------------ Load Config ----------------------------------------------
 
-//Serial.println("[INFO]: Loading Config");
-//if (!configLoad())
+// Serial.println("[INFO]: Loading Config");
+// if (!configLoad())
 //{
-//  Serial.println("[WARNING]: Failed to load config!");
-//}
-//else
+//   Serial.println("[WARNING]: Failed to load config!");
+// }
+// else
 //{
-//  Serial.println("[INFO]: Config Loaded");
-//}
+//   Serial.println("[INFO]: Config Loaded");
+// }
 
 void setup()
 {
