@@ -95,13 +95,10 @@ int lastrgbState = 0;
 
 // ------------------------------ Buttons press vars ------------------------------
 // press var's for determening a press or double press
-int holdTime = 1000;
-
-unsigned long lastSwitchTime = 0;
-long DCgap = 250;   // 150 //230   // time for captureing a double press
-int debounce = 20;  // 50 //20 // 35
-
-// Constants
+const int holdTime = 1000;
+const unsigned long lastSwitchTime = 0;
+const long DCgap = 250;   // 150 //230   // time for captureing a double press
+const int debounce = 20;  // 50 //20 // 35
 const byte BUTTON_DEBOUNCE_INTERVAL = 25;
 
 const byte buttonPin1 = 4;  // key 1 backButton
@@ -117,7 +114,7 @@ const uint8_t buttonPin4Action2 = KEY_F16;
 
 // ------------------------------ DEBUG ------------------------------
 // Determs if Serial.print is enabled
-const bool debugState = true;
+const bool debugState = false;
 
 void isDebugTruePrintToSerial(String temp) {
   if (debugState) {
@@ -126,7 +123,6 @@ void isDebugTruePrintToSerial(String temp) {
 }
 
 // ------------------------------ Dataconf ------------------------------
-
 // Struct to hold the general config like colours.
 struct Config {
   char layout;
@@ -193,32 +189,38 @@ Button Button4(buttonPin4, debugState);
 // TODO
 // n = how many leds need be turned on, is used as a array this enables to not turn all the leds.
 // state = used for turning the leds on and of as a toggle
-void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n) {
+void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int ledIndex) {
+  if (ledIndex < 0 || ledIndex >= NUM_LEDS) {
+    // Handle out-of-range index
+    return;
+  }
+
   switch (state) {
     case 0:
+      // Turn on LEDs with the specified color
       FastLED.clear();
-      leds[n] = CRGB(cRed, cGreen, cBlue);
-      for (int i = 0; i <= NUM_LEDS - 1; i++) {
-        leds[n + i] = CRGB(cRed, cGreen, cBlue);
+      for (int i = 0; i < NUM_LEDS; i++) {
+        leds[ledIndex + i] = CRGB(cRed, cGreen, cBlue);
       }
-
-      isDebugTruePrintToSerial(state + "");
-      isDebugTruePrintToSerial(lastrgbState + "");
       FastLED.show();
+
+      // Update state variables
       lastrgbState = 0;
       rgbState = 0;
       break;
-    case 1:  // is used for turning it off
+
+    case 1:
+      // Turn off LEDs
       FastLED.clear();
-      isDebugTruePrintToSerial("lastrgbState black");
-      isDebugTruePrintToSerial(lastrgbState + "");
-      leds[NUM_LEDS] = CRGB::Black;
       FastLED.show();
+
+      // Update state variables
       lastrgbState = 0;
       rgbState = 0;
       break;
   }
 }
+
 
 void pressEventHandler(int event) {
   switch (event) {
