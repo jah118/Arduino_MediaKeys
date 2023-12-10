@@ -66,6 +66,7 @@
 // include the HID library
 #include "HID-Project.h"
 #include "FastLED.h"
+#include "Bounce2.h"
 
 // TODO add defin things to struct and load from json
 
@@ -101,10 +102,10 @@ const int BUTTON_DEBOUNCE_INTERVAL = 25;
 
 int reading;
 
-const int buttonPin1 = 4;  // key 1 backButton
-const int buttonPin2 = 5;  // key 2 playButton
-const int buttonPin3 = 6;  // key 3 fwdButton
-const int buttonPin4 = 7;  // key 4 customButton F16/F19
+const byte buttonPin1 = 4;  // key 1 backButton
+const byte buttonPin2 = 5;  // key 2 playButton
+const byte buttonPin3 = 6;  // key 3 fwdButton
+const byte buttonPin4 = 7;  // key 4 customButton F16/F19
 
 const uint8_t buttonPin1Action = MEDIA_PREVIOUS;
 const uint8_t buttonPin2Action = MEDIA_PLAY_PAUSE;
@@ -121,7 +122,6 @@ void isDebugTruePrintToSerial(String temp) {
     Serial.println(temp);
   }
 }
-
 
 // ------------------------------ Dataconf ------------------------------
 
@@ -154,10 +154,10 @@ Bounce button3Debouncer = Bounce();
 Bounce button4Debouncer = Bounce();
 
 // Button.h lib setup
-Button Button1(buttonPin1);
-Button Button2(buttonPin2);
-Button Button3(buttonPin3);
-Button Button4(buttonPin4);
+Button Button1(buttonPin1, debugState);
+Button Button2(buttonPin2, debugState);
+Button Button3(buttonPin3, debugState);
+Button Button4(buttonPin4, debugState);
 
 // -------------- Start filesystem ----------------------
 
@@ -385,7 +385,7 @@ void loop() {
   Button1.Update();
   Button2.Update();
   Button3.Update();
-  Button4.Update();
+  // Button4.Update();
 
   // Button 1 pressed.
   if (button1Debouncer.update()) {
@@ -427,28 +427,148 @@ void loop() {
     }
   }
 
-  // Button 4 pressed.
-  if (button4Debouncer.update()) {
-    handleButton4Press();
-    // //////  (  OLD WAY Works but not as stabel as hoped ) the un stable ness comes from debouncetime in press   //////
-    // // single or double  pressed
-    // //-----------------------------------------------------------------------------------------
-    // reading = digitalRead(buttonPin4);
-    // if (reading == HIGH && lastReading == LOW)  // This is when the button is not pressed then the ontime is
-    // {
-    //   onTime = millis();
-    // } else if (reading == LOW && lastReading == HIGH)  // This is when the button is pressed
-    // {
-    //   //    onTime = millis();
-    //   if (((millis() - onTime) > bounceTime) && hold != 1) {
-    //     press();
-    //   }
-    //   if (hold = 1)  /// DOES THIS WORK TODO FIX IT
-    //   {
-    //     hold = 0;
-    //   }
-    // }
+  // // Button 4 pressed.
+  // if (button4Debouncer.update()) {
+
+  int b = Button4.CheckButtonEvent();
+
+  switch (b) {
+    case 1:
+      clickEvent();
+      press();
+      break;
+    case 2:
+      doubleClickEvent();
+      Keyboard.write(KEY_F16);
+      turnOnRGBByState(0, 0, 250, lastrgbState, 0);
+      break;
+    case 3:
+      holdEvent();
+      break;
+    case 4:
+      longHoldEvent();
+      break;
+    // Add more cases as needed
+    default:
+      // Handle default case if necessary
+      break;
   }
 
+  //   handleButton4Press();
+  //   // //////  (  OLD WAY Works but not as stabel as hoped ) the un stable ness comes from debouncetime in press   //////
+  //   // // single or double  pressed
+  //   // //-----------------------------------------------------------------------------------------
+  //   // reading = digitalRead(buttonPin4);
+  //   // if (reading == HIGH && lastReading == LOW)  // This is when the button is not pressed then the ontime is
+  //   // {
+  //   //   onTime = millis();
+  //   // } else if (reading == LOW && lastReading == HIGH)  // This is when the button is pressed
+  //   // {
+  //   //   //    onTime = millis();
+  //   //   if (((millis() - onTime) > bounceTime) && hold != 1) {
+  //   //     press();
+  //   //   }
+  //   //   if (hold = 1)  /// DOES THIS WORK TODO FIX IT
+  //   //   {
+  //   //     hold = 0;
+  //   //   }
+  //   // }
+  // }
+
   lastReading = reading;
+}
+
+// =================================================
+// Events to trigger
+
+void clickEvent() {
+  isDebugTruePrintToSerial("clickEvent");
+}
+void doubleClickEvent() {
+  isDebugTruePrintToSerial("doubleClickEvent");
+}
+void holdEvent() {
+  isDebugTruePrintToSerial("holdEvent");
+}
+void longHoldEvent() {
+  isDebugTruePrintToSerial("longHoldEvent");
+}
+
+// =================================================
+//  MULTI-CLICK:  One Button, Multiple Events
+
+// Button timing variables
+int debounce = 20;  // ms debounce period to prevent flickering when pressing or releasing the button
+int DCgap = 250;    // max ms between clicks for a double click event
+
+
+// Button variables
+boolean buttonVal = HIGH;           // value read from button
+boolean buttonLast = HIGH;          // buffered value of the button's previous state
+boolean DCwaiting = false;          // whether we're waiting for a double click (down)
+boolean DConUp = false;             // whether to register a double click on next release, or whether to wait and click
+boolean singleOK = true;            // whether it's OK to do a single click
+long downTime = -1;                 // time the button was pressed down
+long upTime = -1;                   // time the button was released
+boolean ignoreUp = false;           // whether to ignore the button release because the click+hold was triggered
+boolean waitForUp = false;          // when held, whether to wait for the up event
+boolean holdEventPast = false;      // whether or not the hold event happened already
+boolean longHoldEventPast = false;  // whether or not the long hold event happened already
+
+
+int checkButton(int buttonPinValue) {
+  int event = 0;
+  buttonVal = digitalRead(buttonPinValue);
+  // Button pressed down
+  if (buttonVal == LOW && buttonLast == HIGH && (millis() - upTime) > debounce) {
+    downTime = millis();
+    ignoreUp = false;
+    waitForUp = false;
+    singleOK = true;
+    holdEventPast = false;
+    longHoldEventPast = false;
+    if ((millis() - upTime) < DCgap && DConUp == false && DCwaiting == true) DConUp = true;
+    else DConUp = false;
+    DCwaiting = false;
+  }
+  // Button released
+  else if (buttonVal == HIGH && buttonLast == LOW && (millis() - downTime) > debounce) {
+    if (not ignoreUp) {
+      upTime = millis();
+      if (DConUp == false) DCwaiting = true;
+      else {
+        event = 2;
+        DConUp = false;
+        DCwaiting = false;
+        singleOK = false;
+      }
+    }
+  }
+  // Test for normal click event: DCgap expired
+  if (buttonVal == HIGH && (millis() - upTime) >= DCgap && DCwaiting == true && DConUp == false && singleOK == true && event != 2) {
+    event = 1;
+    DCwaiting = false;
+  }
+  // Test for hold
+  if (buttonVal == LOW && (millis() - downTime) >= holdTime) {
+    // Trigger "normal" hold
+    if (not holdEventPast) {
+      event = 3;
+      waitForUp = true;
+      ignoreUp = true;
+      DConUp = false;
+      DCwaiting = false;
+      //downTime = millis();
+      holdEventPast = true;
+    }
+    // Trigger "long" hold
+    if ((millis() - downTime) >= longHoldTime) {
+      if (not longHoldEventPast) {
+        event = 4;
+        longHoldEventPast = true;
+      }
+    }
+  }
+  buttonLast = buttonVal;
+  return event;
 }
