@@ -1,0 +1,11 @@
+{
+  "layout": "LAYOUT_DANISH",
+  "datapin": 9,
+  "ledtype": "WS2811",
+  "colororder": "GRB",
+  "nleds": 8,
+  "brightness": 32,
+  "bounceTime": 35,
+  "holdTime": 500,
+  "doubleTime": 230
+}
