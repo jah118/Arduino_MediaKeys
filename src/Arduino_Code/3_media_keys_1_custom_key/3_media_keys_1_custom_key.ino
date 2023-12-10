@@ -59,15 +59,17 @@
 
   ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''*''''''''*''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''*/
 
+// look up hid projekt to see Languages  or see AlternateLanguageLayout.ino from hid project for example
+#define HID_CUSTOM_LAYOUT  // set this flag to indicate that a custom layout is selected
+#define LAYOUT_DANISH      // set this flag after the above flag to indicate the custom input method is DANISH
+
 // include the HID library
 #include "HID-Project.h"
 #include "FastLED.h"
 
 // TODO add defin things to struct and load from json
 
-// look up hid projekt to see Languages  or see AlternateLanguageLayout.ino from hid project for example
-#define HID_CUSTOM_LAYOUT // set this flag to indicate that a custom layout is selected
-#define LAYOUT_DANISH     // set this flag after the above flag to indicate the custom input method is DANISH
+
 
 //------------------------------ rgb ------------------------------
 #define DATA_PIN 9
@@ -77,7 +79,7 @@
 #define NUM_LEDS 8
 #define BRIGHTNESS 32
 
-CRGB leds[NUM_LEDS]; // TODO maybe move beacause of loading order of data and info from config
+CRGB leds[NUM_LEDS];  // TODO maybe move beacause of loading order of data and info from config
 
 int rgbState = 1;
 int lastrgbState = 0;
@@ -86,102 +88,40 @@ int lastrgbState = 0;
 // press var's for determening a press or double press
 unsigned long onTime;
 int lastReading = LOW;
-int bounceTime = 35; // 50
-int holdTime = 500;  // 500
+int bounceTime = 35;  // 50
+int holdTime = 500;   // 500
 unsigned int hold = 0;
 
 unsigned long lastSwitchTime = 0;
-long doubleTime = 230; // 150 //230   // time for captureing a double press
+long doubleTime = 230;  // 150 //230   // time for captureing a double press
+
+// Constants
+const int BUTTON_DEBOUNCE_INTERVAL = 25;
 
 int reading;
 
-const int buttonPin1 = 4; // key 1 backButton
-const int buttonPin2 = 5; // key 2 playButton
-const int buttonPin3 = 6; // key 3 fwdButton
-const int buttonPin4 = 7; // key 4 customButton F16/F19
+const int buttonPin1 = 4;  // key 1 backButton
+const int buttonPin2 = 5;  // key 2 playButton
+const int buttonPin3 = 6;  // key 3 fwdButton
+const int buttonPin4 = 7;  // key 4 customButton F16/F19
+
 
 // ------------------------------ DEBUG ------------------------------
 // Determs if Serial.print is enabled
 const bool debugState = true;
 
-void isDebugTruePrintToSerial(String temp)
-{
-  if (debugState)
-  {
+void isDebugTruePrintToSerial(String temp) {
+  if (debugState) {
     Serial.println(temp);
   }
 }
 
-// TODO
-// n = how many leds need be turned on, is used as a array this enables to not turn all the leds.
-// state = used for turning the leds on and of as a toggle
-void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n)
-{
-  switch (state)
-  {
-  case 0:
-    FastLED.clear();
-    leds[n] = CRGB(cRed, cGreen, cBlue);
-    for (int i = 0; i <= NUM_LEDS - 1; i++)
-    {
-      leds[n + i] = CRGB(cRed, cGreen, cBlue);
-    }
 
-    isDebugTruePrintToSerial(state + "");
-    isDebugTruePrintToSerial(lastrgbState + "");
-    FastLED.show();
-    lastrgbState = 0;
-    rgbState = 0;
-    break;
-  case 1: // is used for turning it off
-    FastLED.clear();
-    isDebugTruePrintToSerial("lastrgbState black");
-    isDebugTruePrintToSerial(lastrgbState + "");
-    leds[NUM_LEDS] = CRGB::Black;
-    FastLED.show();
-    lastrgbState = 0;
-    rgbState = 0;
-    break;
-  }
-}
+// ------------------------------ Dataconf ------------------------------
 
-// TODO optimise this
-void press()
-{
-  if ((millis() - lastSwitchTime) < doubleTime)
-  {
-    isDebugTruePrintToSerial("double press");
-
-    Keyboard.write(KEY_F16);
-    // goes blue and stay blue to show state if need like to show you are muted or deafed on discord
-    turnOnRGBByState(0, 0, 250, lastrgbState, 0);
-  }
-  else if ((millis() - lastSwitchTime) > doubleTime)
-  {
-    isDebugTruePrintToSerial("single press");
-    Keyboard.write(KEY_F19);
-    switch (rgbState) // when case is 0 the led was on
-    {
-    case 0:
-      isDebugTruePrintToSerial("rgbState black : " + rgbState);
-      turnOnRGBByState(0, 0, 0, lastrgbState, 0);
-      rgbState = 1;
-      break;
-    case 1:
-      isDebugTruePrintToSerial("case 1");
-      turnOnRGBByState(255, 0, 0, lastrgbState, 0);
-      rgbState = 0;
-      isDebugTruePrintToSerial("new val rgbState red");
-      isDebugTruePrintToSerial(rgbState + "");
-      break;
-    }
-  }
-  lastSwitchTime = millis();
-}
 
 // Struct to hold the general config like colours.
-struct Config
-{
+struct Config {
   char layout;
   uint16_t datapin;
   char ledtype;
@@ -206,6 +146,7 @@ Bounce button1Debouncer = Bounce();
 Bounce button2Debouncer = Bounce();
 Bounce button3Debouncer = Bounce();
 Bounce button4Debouncer = Bounce();
+
 // Button.h lib setup
 Button Button1(buttonPin1);
 Button Button2(buttonPin2);
@@ -240,9 +181,134 @@ Button Button4(buttonPin4);
 //   Serial.println("[INFO]: Config Loaded");
 // }
 
-void setup()
-{
+//------------------ Functions ----------------------------------------------
+
+
+// TODO
+// n = how many leds need be turned on, is used as a array this enables to not turn all the leds.
+// state = used for turning the leds on and of as a toggle
+void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n) {
+  switch (state) {
+    case 0:
+      FastLED.clear();
+      leds[n] = CRGB(cRed, cGreen, cBlue);
+      for (int i = 0; i <= NUM_LEDS - 1; i++) {
+        leds[n + i] = CRGB(cRed, cGreen, cBlue);
+      }
+
+      isDebugTruePrintToSerial(state + "");
+      isDebugTruePrintToSerial(lastrgbState + "");
+      FastLED.show();
+      lastrgbState = 0;
+      rgbState = 0;
+      break;
+    case 1:  // is used for turning it off
+      FastLED.clear();
+      isDebugTruePrintToSerial("lastrgbState black");
+      isDebugTruePrintToSerial(lastrgbState + "");
+      leds[NUM_LEDS] = CRGB::Black;
+      FastLED.show();
+      lastrgbState = 0;
+      rgbState = 0;
+      break;
+  }
+}
+
+// // TODO optimise this
+// void press()
+// {
+//   if ((millis() - lastSwitchTime) < doubleTime)
+//   {
+//     isDebugTruePrintToSerial("double press");
+
+//     Keyboard.write(KEY_F16);
+//     // goes blue and stay blue to show state if need like to show you are muted or deafed on discord
+//     turnOnRGBByState(0, 0, 250, lastrgbState, 0);
+//   }
+//   else if ((millis() - lastSwitchTime) > doubleTime)
+//   {
+//     isDebugTruePrintToSerial("single press");
+//     Keyboard.write(KEY_F19);
+//     switch (rgbState) // when case is 0 the led was on
+//     {
+//     case 0:
+//       isDebugTruePrintToSerial("rgbState black : " + rgbState);
+//       turnOnRGBByState(0, 0, 0, lastrgbState, 0);
+//       rgbState = 1;
+//       break;
+//     case 1:
+//       isDebugTruePrintToSerial("case 1");
+//       turnOnRGBByState(255, 0, 0, lastrgbState, 0);
+//       rgbState = 0;
+//       isDebugTruePrintToSerial("new val rgbState red");
+//       isDebugTruePrintToSerial(rgbState + "");
+//       break;
+//     }
+//   }
+//   lastSwitchTime = millis();
+// }
+
+void press() {
+  unsigned long currentTime = millis();
+
+  if ((currentTime - lastSwitchTime) < doubleTime) {
+    // Double press
+    isDebugTruePrintToSerial("double press");
+    Keyboard.write(KEY_F16);
+    turnOnRGBByState(0, 0, 250, lastrgbState, 0);
+    hold = 0;  // Reset hold for double press
+  } else {
+    // Single press
+    isDebugTruePrintToSerial("single press");
+    Keyboard.write(KEY_F19);
+
+    switch (rgbState) {
+      case 0:
+        isDebugTruePrintToSerial("case 0");
+        isDebugTruePrintToSerial("last rgbState: " + lastrgbState);
+        isDebugTruePrintToSerial("rgbState black : " + rgbState);
+        turnOnRGBByState(0, 0, 0, lastrgbState, 0);
+        rgbState = 1;
+        break;
+      case 1:
+        isDebugTruePrintToSerial("case 1");
+        turnOnRGBByState(255, 0, 0, lastrgbState, 0);
+        rgbState = 0;
+        isDebugTruePrintToSerial("new val rgbState red");
+        isDebugTruePrintToSerial(rgbState + "");
+        break;
+    }
+
+    hold = 1;  // Set hold for the single press
+  }
+
+  lastSwitchTime = currentTime;
+}
+
+void handleButton4Press() {
+  unsigned long currentTime = millis();
+
+  // Button pressed
+  if (button4Debouncer.fell()) {
+    if (currentTime - lastSwitchTime > doubleTime) {
+      // Single press
+      press();
+      hold = 0;  // Reset hold for single press
+    } else {
+      // Double press
+      isDebugTruePrintToSerial("double press");
+      Keyboard.write(KEY_F16);
+      turnOnRGBByState(0, 0, 250, lastrgbState, 0);
+      hold = 0;  // Reset hold for double press
+    }
+
+    lastSwitchTime = currentTime;
+  }
+}
+
+void setup() {
   Serial.begin(115200);
+  // Delay for recovery
   delay(20);
 
   // Define the pin mode for each pin used
@@ -258,26 +324,25 @@ void setup()
   button4Debouncer.attach(buttonPin4);
 
   // DEBOUNCE INTERVAL IN MILLISECONDS
-  button1Debouncer.interval(25);
-  button2Debouncer.interval(25);
-  button3Debouncer.interval(25);
-  button4Debouncer.interval(25);
+  button1Debouncer.interval(BUTTON_DEBOUNCE_INTERVAL);
+  button2Debouncer.interval(BUTTON_DEBOUNCE_INTERVAL);
+  button3Debouncer.interval(BUTTON_DEBOUNCE_INTERVAL);
+  button4Debouncer.interval(BUTTON_DEBOUNCE_INTERVAL);
 
   // Begin HID connection
   Keyboard.begin();
   Consumer.begin();
 
-  delay(1500); // 1.5 second delay for recovery
+  delay(1500);  // 1.5 second delay for recovery
 
   // tell FastLED about the LED strip configuration
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS)
-      .setCorrection(TypicalLEDStrip)
-      .setDither(BRIGHTNESS < 255);
+    .setCorrection(TypicalLEDStrip)
+    .setDither(BRIGHTNESS < 255);
 
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
-  for (int dot = 0; dot < NUM_LEDS - 1; dot++)
-  {
+  for (int dot = 0; dot < NUM_LEDS - 1; dot++) {
     FastLED.show();
     // clear this led for the next time around the loop
     leds[dot] = CRGB::Black;
@@ -287,8 +352,7 @@ void setup()
   reading = digitalRead(buttonPin4);
 }
 
-void loop()
-{
+void loop() {
   // Calls the Update function as fast as possible.
   Button1.Update();
   Button2.Update();
@@ -296,76 +360,66 @@ void loop()
   Button4.Update();
 
   // Button 1 pressed.
-  if (button1Debouncer.update())
-  {
-    if (button1Debouncer.fell()) // key is pressed down
+  if (button1Debouncer.update()) {
+    if (button1Debouncer.fell())  // key is pressed down
     {
-      Consumer.write(MEDIA_PREVIOUS); // send HID command
+      Consumer.write(MEDIA_PREVIOUS);  // send HID command
       isDebugTruePrintToSerial("Back");
       // Check if button 1 and 2 pressed together
-      if (digitalRead(buttonPin2) == 0)
-      {
+      if (digitalRead(buttonPin2) == 0) {
         Button1.IncrementCounter();
       }
     }
   }
 
   // Button 2 pressed.
-  if (button2Debouncer.update())
-  {
-    if (button2Debouncer.fell()) // key is pressed down
+  if (button2Debouncer.update()) {
+    if (button2Debouncer.fell())  // key is pressed down
     {
-      Consumer.write(MEDIA_PLAY_PAUSE); // send HID command
+      Consumer.write(MEDIA_PLAY_PAUSE);  // send HID command
       isDebugTruePrintToSerial("Play/Pause");
       // Check if button 1 and 2 pressed together
-      if (digitalRead(buttonPin1) == 0)
-      {
+      if (digitalRead(buttonPin1) == 0) {
         Button1.IncrementCounter(Button2);
       }
     }
   }
 
   // Button 3 pressed.
-  if (button3Debouncer.update())
-  {
-    if (button3Debouncer.fell()) // key is pressed down
+  if (button3Debouncer.update()) {
+    if (button3Debouncer.fell())  // key is pressed down
     {
       // Check if button 3 and 4 pressed together
-      if (digitalRead(buttonPin4) == 0)
-      {
+      if (digitalRead(buttonPin4) == 0) {
         Button3.IncrementCounter();
-      }
-      else
-      {
-        Consumer.write(MEDIA_NEXT); // send HID command
+      } else {
+        Consumer.write(MEDIA_NEXT);  // send HID command
         isDebugTruePrintToSerial("Next");
       }
     }
   }
 
   // Button 4 pressed.
-  if (button4Debouncer.update())
-  {
-    //////  (  OLD WAY Works but not as stabel as hoped ) the un stable ness comes from debouncetime in press   //////
-    // single or double  pressed
-    //-----------------------------------------------------------------------------------------
-    reading = digitalRead(buttonPin4);
-    if (reading == HIGH && lastReading == LOW) // This is when the button is not pressed then the ontime is
-    {
-      onTime = millis();
-    }
-    else if (reading == LOW && lastReading == HIGH) // This is when the button is pressed
-    {
-      //    onTime = millis();
-      if (((millis() - onTime) > bounceTime) && hold != 1)
-      {
-        press();
-      }
-      if (hold = 1) /// DOES THIS WORK TODO FIX IT
-      {
-        hold = 0;
-      }
-    }
+  if (button4Debouncer.update()) {
+        handleButton4Press();
+    // //////  (  OLD WAY Works but not as stabel as hoped ) the un stable ness comes from debouncetime in press   //////
+    // // single or double  pressed
+    // //-----------------------------------------------------------------------------------------
+    // reading = digitalRead(buttonPin4);
+    // if (reading == HIGH && lastReading == LOW)  // This is when the button is not pressed then the ontime is
+    // {
+    //   onTime = millis();
+    // } else if (reading == LOW && lastReading == HIGH)  // This is when the button is pressed
+    // {
+    //   //    onTime = millis();
+    //   if (((millis() - onTime) > bounceTime) && hold != 1) {
+    //     press();
+    //   }
+    //   if (hold = 1)  /// DOES THIS WORK TODO FIX IT
+    //   {
+    //     hold = 0;
+    //   }
+    // }
   }
 
   lastReading = reading;
