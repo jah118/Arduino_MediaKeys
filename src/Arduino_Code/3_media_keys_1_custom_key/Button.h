@@ -1,11 +1,11 @@
-#ifndef Buttom_h
-#define Buttom_h
+// Button.h
+#ifndef BUTTON_H
+#define BUTTON_H
 
 #include <Arduino.h>
 #include "Bounce2.h"
 
-class Button
-{
+class Button {
 private:
   byte k_buttonPin;
   byte k_counter = 0;
@@ -13,12 +13,16 @@ private:
   unsigned long k_previousMillis;
 
 public:
-  Button(byte buttonPin) : k_buttonPin(buttonPin),
-                           k_counter(0),
-                           k_buttonPressTimeout(750), // Button press timeout in ms.
-                           k_previousMillis(0)
-  {
-  }
+  // OLD -- needs more testing  deleteing old code
+  // Button(byte buttonPin) : k_buttonPin(buttonPin),
+  //                          k_counter(0),
+  //                          k_buttonPressTimeout(750), // Button press timeout in ms.
+  //                          k_previousMillis(0)
+  // {
+  // }
+
+  // NEW -- 
+  Button(byte buttonPin);
 
   void Update();
 
