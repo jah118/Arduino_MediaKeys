@@ -1,20 +1,7 @@
 // Button.cpp
 #include "Arduino.h"
 #include "Button.h"
-// #include <Bounce2.h>
 
-// Button::Button(byte buttonPin)
-//   : k_buttonPin(buttonPin),
-//     k_counter(0),
-//     k_buttonPressTimeout(750),  // Button press timeout in ms.
-//     k_previousMillis(0) {
-// }
-
-// default  where -- Button timing variables
-// int debounce = 20;          // ms debounce period to prevent flickering when pressing or releasing the button
-// int DCgap = 250;            // max ms between clicks for a double click event
-// int holdTime = 1000;        // ms hold period: how long to wait for press+hold event
-// int longHoldTime = 3000;    // ms long hold period: how long to wait for press+hold event
 Button::Button(byte buttonPin)
   : m_buttonPin(buttonPin),
     m_counter(0),
@@ -121,11 +108,15 @@ void Button::isDebugTruePrintToSerial(String temp) {
   }
 }
 
+// CheckButtonEvent Function
+// This function checks the state of the button and determines the type of button event.
+// It supports Click, Double-Click, Hold, and Long Hold based on the 4-Way Button concept.
+//  It returns  Click = 1, Double-Click = 2, Hold = 3, Long Hold = 4
+//
+//  4-Way Button: Cli ck, Double-Click, Hold, Long Hold - Based on <a href="https://jmsarduino.blogspot.com/2009/10/4-way-button-click-double-click-hold.html ">4-Way Button</a>
 int Button::CheckButtonEvent() {
-  // isDebugTruePrintToSerial("CheckButtonEvent start");
   int event = 0;
   buttonVal = digitalRead(m_buttonPin);
-  // isDebugTruePrintToSerial("CheckButtonEvent  " + String(buttonVal));
 
   // Button pressed down
   if (buttonVal == LOW && buttonLast == HIGH && (millis() - upTime) > debounce) {
@@ -185,8 +176,5 @@ int Button::CheckButtonEvent() {
     isDebugTruePrintToSerial("CheckButtonEvent Event:" + String(event));
   }
   buttonLast = buttonVal;
-
-
-
   return event;
 }
