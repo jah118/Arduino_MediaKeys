@@ -31,7 +31,6 @@
 
 */
 
-
 /*
   //      V0.8 - done
     use #include <Bounce2.h> for better double  press
@@ -82,7 +81,7 @@
 
 //------------------------------ rgb ------------------------------
 #define DATA_PIN 9
-//#define CLK_PIN 4
+// #define CLK_PIN 4
 #define LED_TYPE WS2811
 #define COLOR_ORDER GRB
 #define NUM_LEDS 8
