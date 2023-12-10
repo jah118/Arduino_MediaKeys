@@ -88,12 +88,13 @@ int lastrgbState = 0;
 // press var's for determening a press or double press
 unsigned long onTime;
 int lastReading = LOW;
-int bounceTime = 35;  // 50
-int holdTime = 500;   // 500
+int bounceTime = 20;  // 50 //20 // 35
+int holdTime = 1000;
+int longHoldTime = 3000;
 unsigned int hold = 0;
 
 unsigned long lastSwitchTime = 0;
-long doubleTime = 230;  // 150 //230   // time for captureing a double press
+long doubleTime = 250;  // 150 //230   // time for captureing a double press
 
 // Constants
 const int BUTTON_DEBOUNCE_INTERVAL = 25;
@@ -104,6 +105,11 @@ const int buttonPin1 = 4;  // key 1 backButton
 const int buttonPin2 = 5;  // key 2 playButton
 const int buttonPin3 = 6;  // key 3 fwdButton
 const int buttonPin4 = 7;  // key 4 customButton F16/F19
+
+const uint8_t buttonPin1Action = MEDIA_PREVIOUS;
+const uint8_t buttonPin2Action = MEDIA_PLAY_PAUSE;
+const uint8_t buttonPin3Action = MEDIA_NEXT;
+
 
 
 // ------------------------------ DEBUG ------------------------------
@@ -290,9 +296,14 @@ void handleButton4Press() {
 
   // Button pressed
   if (button4Debouncer.fell()) {
+    // delay(20);
     if (currentTime - lastSwitchTime > doubleTime) {
       // Single press
+      Serial.println("before ");
+
       press();
+      Serial.println("after ");
+
       hold = 0;  // Reset hold for single press
     } else {
       // Double press
@@ -306,11 +317,16 @@ void handleButton4Press() {
   }
 }
 
-void setup() {
-  Serial.begin(115200);
-  // Delay for recovery
-  delay(20);
+void doublePress(KeyboardKeycode key) {
+  // Double press
+  isDebugTruePrintToSerial("double press");
+  // Action to be performed on double press
+  Keyboard.write(key);
+  turnOnRGBByState(0, 0, 250, lastrgbState, 0);
+}
 
+// Initializes buttons and debouncers for setup.
+void setupButtons() {
   // Define the pin mode for each pin used
   pinMode(buttonPin1, INPUT_PULLUP);
   pinMode(buttonPin2, INPUT_PULLUP);
@@ -328,12 +344,24 @@ void setup() {
   button2Debouncer.interval(BUTTON_DEBOUNCE_INTERVAL);
   button3Debouncer.interval(BUTTON_DEBOUNCE_INTERVAL);
   button4Debouncer.interval(BUTTON_DEBOUNCE_INTERVAL);
+}
+
+
+
+
+void setup() {
+  Serial.begin(115200);
+  // Delay for recovery
+  delay(20);
+
+  // encapsulated buttons and debouncers basic setup
+  setupButtons();
 
   // Begin HID connection
   Keyboard.begin();
   Consumer.begin();
 
-  delay(1500);  // 1.5 second delay for recovery
+  delay(1500);  // 1.5 second delay for recovery and HID connection is sometime unstable at start, this limits it to less.
 
   // tell FastLED about the LED strip configuration
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS)
@@ -363,7 +391,7 @@ void loop() {
   if (button1Debouncer.update()) {
     if (button1Debouncer.fell())  // key is pressed down
     {
-      Consumer.write(MEDIA_PREVIOUS);  // send HID command
+      Consumer.write(buttonPin1Action);  // send HID command
       isDebugTruePrintToSerial("Back");
       // Check if button 1 and 2 pressed together
       if (digitalRead(buttonPin2) == 0) {
@@ -376,7 +404,7 @@ void loop() {
   if (button2Debouncer.update()) {
     if (button2Debouncer.fell())  // key is pressed down
     {
-      Consumer.write(MEDIA_PLAY_PAUSE);  // send HID command
+      Consumer.write(buttonPin2Action);  // send HID command
       isDebugTruePrintToSerial("Play/Pause");
       // Check if button 1 and 2 pressed together
       if (digitalRead(buttonPin1) == 0) {
@@ -393,7 +421,7 @@ void loop() {
       if (digitalRead(buttonPin4) == 0) {
         Button3.IncrementCounter();
       } else {
-        Consumer.write(MEDIA_NEXT);  // send HID command
+        Consumer.write(buttonPin3Action);  // send HID command
         isDebugTruePrintToSerial("Next");
       }
     }
@@ -401,7 +429,7 @@ void loop() {
 
   // Button 4 pressed.
   if (button4Debouncer.update()) {
-        handleButton4Press();
+    handleButton4Press();
     // //////  (  OLD WAY Works but not as stabel as hoped ) the un stable ness comes from debouncetime in press   //////
     // // single or double  pressed
     // //-----------------------------------------------------------------------------------------
