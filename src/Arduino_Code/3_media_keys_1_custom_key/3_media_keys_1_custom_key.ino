@@ -23,7 +23,7 @@
   https://www.instructables.com/id/USB-Volume-Control-and-Caps-Lock-LED-Simple-Cheap-/
 */
 
-//      TODO FOR V2 - done 
+//      TODO FOR V2 - done
 /*
     use #include <Bounce2.h> for better douldbe press
     https://arduino.stackexchange.com/questions/69897/detecting-how-many-button-pressessingle-tap-double-tap-etc-with-two-simultane
@@ -36,14 +36,14 @@
     https://forum.arduino.cc/t/writing-to-flash-from-application-please-test-and-enjoy/320295
   // TODO goals for v3.0.0
     add serial support between arduione and esp to send keypress or recives keypress
-      - reason this is to add support for esp or raspberry zero with screen that shows media status. 
-      - if zero is used then a webpage can be used. show and pull data from there. do browser in terminal to save resources, and make it host is own webpages that is displayed 
+      - reason this is to add support for esp or raspberry zero with screen that shows media status.
+      - if zero is used then a webpage can be used. show and pull data from there. do browser in terminal to save resources, and make it host is own webpages that is displayed
       - if esp is used thne look in to building ui that where some part is static and and only progress bar moves https://forum.arduino.cc/t/tft-touch-reaching-high-refresh-rate-cost-effectively/595823/6
         and rest of sreen updates only on new song changed (this not for first version, first version shows the name of the song played  )
         https://www.youtube.com/watch?v=rq5yPJbX_uk
         https://www.esp8266.com/viewtopic.php?f=32&t=16366
-        
-      
+
+
 */
 /*'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' Notes / bugs  *''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
   // test singel or double press of keyy
@@ -63,7 +63,7 @@
 
 // rgb
 #define DATA_PIN 9
-//#define CLK_PIN 4
+// #define CLK_PIN 4
 #define LED_TYPE WS2811
 #define COLOR_ORDER GRB
 #define NUM_LEDS 8
@@ -77,12 +77,12 @@ int lastrgbState = 0;
 // press var's for determening a press or double press
 unsigned long onTime;
 int lastReading = LOW;
-int bounceTime = 35;      // 50
-int holdTime = 500;       // 500
+int bounceTime = 35; // 50
+int holdTime = 500;  // 500
 unsigned int hold = 0;
 
 unsigned long lastSwitchTime = 0;
-long doubleTime = 230;    // 150 //230
+long doubleTime = 230; // 150 //230
 
 int reading;
 
@@ -108,54 +108,54 @@ void isDebugTruePrintToSerial(String temp)
 class Button
 {
 
-  private:
-    byte m_buttonPin;
-    byte m_counter = 0;
-    unsigned long m_buttonPressTimeout;
-    unsigned long m_previousMillis;
+private:
+  byte m_buttonPin;
+  byte m_counter = 0;
+  unsigned long m_buttonPressTimeout;
+  unsigned long m_previousMillis;
 
-  public:
-    Button(byte buttonPin) : m_buttonPin(buttonPin),
-      m_counter(0),
-      m_buttonPressTimeout(750), // Button press timeout in ms.
-      m_previousMillis(0)
+public:
+  Button(byte buttonPin) : m_buttonPin(buttonPin),
+                           m_counter(0),
+                           m_buttonPressTimeout(750), // Button press timeout in ms.
+                           m_previousMillis(0)
+  {
+  }
+
+  void Update()
+  {
+    if (m_counter > 0 && millis() - m_previousMillis >= m_buttonPressTimeout)
     {
+      isDebugTruePrintToSerial("Count from Update() just before it's reset to 0 = ");
+      Serial.println(GetCounter());
+      m_counter = 0;
     }
+  }
 
-    void Update()
+  void IncrementCounter()
+  {
+    m_counter++;
+    if (m_counter > 4)
     {
-      if (m_counter > 0 && millis() - m_previousMillis >= m_buttonPressTimeout)
-      {
-        isDebugTruePrintToSerial("Count from Update() just before it's reset to 0 = ");
-        Serial.println(GetCounter());
-        m_counter = 0;
-      }
+      m_counter = 4;
     }
-
-    void IncrementCounter()
+    if (m_counter == 1)
     {
-      m_counter++;
-      if (m_counter > 4)
-      {
-        m_counter = 4;
-      }
-      if (m_counter == 1)
-      {
-        m_previousMillis = millis();
-      }
+      m_previousMillis = millis();
     }
+  }
 
-    friend void IncrementCounter(Button &);
+  friend void IncrementCounter(Button &);
 
-    void IncrementCounter(Button &)
-    {
-      IncrementCounter();
-    }
+  void IncrementCounter(Button &)
+  {
+    IncrementCounter();
+  }
 
-    byte GetCounter()
-    {
-      return m_counter;
-    }
+  byte GetCounter()
+  {
+    return m_counter;
+  }
 };
 
 // n = led
@@ -163,30 +163,30 @@ void turnOnRGBByState(int cRed, int cGreen, int cBlue, bool state, int n)
 {
   switch (state)
   {
-    case 0:
-      FastLED.clear();
-      leds[n] = CRGB(cRed, cGreen, cBlue);
-      for (int i = 0; i <= NUM_LEDS - 1; i++)
-      {
-        leds[n + i] = CRGB(cRed, cGreen, cBlue);
-      }
+  case 0:
+    FastLED.clear();
+    leds[n] = CRGB(cRed, cGreen, cBlue);
+    for (int i = 0; i <= NUM_LEDS - 1; i++)
+    {
+      leds[n + i] = CRGB(cRed, cGreen, cBlue);
+    }
 
-      isDebugTruePrintToSerial(state + "");
-      isDebugTruePrintToSerial(lastrgbState + "");
-      FastLED.show();
-      lastrgbState = 0;
-      rgbState = 0;
-      break;
-    case 1:
-      isDebugTruePrintToSerial("red");
-      FastLED.clear();
-      isDebugTruePrintToSerial("lastrgbState black");
-      isDebugTruePrintToSerial(lastrgbState + "");
-      leds[2] = CRGB::Black;
-      FastLED.show();
-      lastrgbState = 0;
-      rgbState = 0;
-      break;
+    isDebugTruePrintToSerial(state + "");
+    isDebugTruePrintToSerial(lastrgbState + "");
+    FastLED.show();
+    lastrgbState = 0;
+    rgbState = 0;
+    break;
+  case 1:
+    isDebugTruePrintToSerial("red");
+    FastLED.clear();
+    isDebugTruePrintToSerial("lastrgbState black");
+    isDebugTruePrintToSerial(lastrgbState + "");
+    leds[2] = CRGB::Black;
+    FastLED.show();
+    lastrgbState = 0;
+    rgbState = 0;
+    break;
   }
 }
 // TODO optimise this
@@ -205,20 +205,20 @@ void press()
     Keyboard.write(KEY_F19);
     switch (rgbState)
     {
-      case 0:
-        isDebugTruePrintToSerial("case 0");
-        isDebugTruePrintToSerial("last rgbState: " + lastrgbState);
-        isDebugTruePrintToSerial("rgbState black : " + rgbState);
-        turnOnRGBByState(0, 0, 0, lastrgbState, 0);
-        rgbState = 1;
-        break;
-      case 1:
-        isDebugTruePrintToSerial("case 1");
-        turnOnRGBByState(255, 0, 0, lastrgbState, 0);
-        rgbState = 0;
-        isDebugTruePrintToSerial("new val rgbState red");
-        isDebugTruePrintToSerial(rgbState + "");
-        break;
+    case 0:
+      isDebugTruePrintToSerial("case 0");
+      isDebugTruePrintToSerial("last rgbState: " + lastrgbState);
+      isDebugTruePrintToSerial("rgbState black : " + rgbState);
+      turnOnRGBByState(0, 0, 0, lastrgbState, 0);
+      rgbState = 1;
+      break;
+    case 1:
+      isDebugTruePrintToSerial("case 1");
+      turnOnRGBByState(255, 0, 0, lastrgbState, 0);
+      rgbState = 0;
+      isDebugTruePrintToSerial("new val rgbState red");
+      isDebugTruePrintToSerial(rgbState + "");
+      break;
     }
   }
 
@@ -244,13 +244,13 @@ void setup()
   pinMode(buttonPin2, INPUT_PULLUP);
   pinMode(buttonPin3, INPUT_PULLUP);
   pinMode(buttonPin4, INPUT_PULLUP);
-  
+
   // BUTTON Setup for Bounce2
   button1Debouncer.attach(buttonPin1);
   button2Debouncer.attach(buttonPin2);
   button3Debouncer.attach(buttonPin3);
   button4Debouncer.attach(buttonPin4);
-  
+
   // DEBOUNCE INTERVAL IN MILLISECONDS
   button1Debouncer.interval(25);
   button2Debouncer.interval(25);
@@ -264,8 +264,8 @@ void setup()
   delay(1500); // 1.5 second delay for recovery
   // tell FastLED about the LED strip configuration
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS)
-  .setCorrection(TypicalLEDStrip)
-  .setDither(BRIGHTNESS < 255);
+      .setCorrection(TypicalLEDStrip)
+      .setDither(BRIGHTNESS < 255);
 
   // set master brightness control
   FastLED.setBrightness(BRIGHTNESS);
